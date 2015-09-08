@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Firebear Studio. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\ImportExport\Block\Adminhtml\Import\Edit\Form">
+        <plugin name="firebear_importexport_source" type="Firebear\ImportExport\Plugin\Block\Import\Form" />
+    </type>
+    <type name="Magento\ImportExport\Model\Import">
+        <plugin name="firebear_importexport_source" type="Firebear\ImportExport\Plugin\Model\Import" />
+    </type>
+    <preference for="Magento\ImportExport\Model\Import" type="Firebear\ImportExport\Plugin\Model\Import" />
+</config>
