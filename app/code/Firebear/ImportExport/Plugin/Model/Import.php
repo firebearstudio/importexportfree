@@ -8,31 +8,39 @@ namespace Firebear\ImportExport\Plugin\Model;
 
 class Import extends \Magento\ImportExport\Model\Import {
 
+    /**
+     * @var \Firebear\ImportExport\Model\Source\ConfigInterface
+     */
     protected $_config;
 
-    protected $_sourceFactory;
+    /**
+     * @var \Firebear\ImportExport\Helper\Data
+     */
+    protected $_helper;
 
     /**
+     * @param \Firebear\ImportExport\Model\Source\ConfigInterface $config,
+     * @param \Firebear\ImportExport\Helper\Data $helper,
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
-     * @param Import\ConfigInterface $importConfig
-     * @param Import\Entity\Factory $entityFactory
-     * @param Resource\Import\Data $importData
-     * @param Export\Adapter\CsvFactory $csvFactory
-     * @param FileTransferFactory $httpFactory
+     * @param \Magento\ImportExport\Model\Import\ConfigInterface $importConfig
+     * @param \Magento\ImportExport\Model\Import\Entity\Factory $entityFactory
+     * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
+     * @param \Magento\ImportExport\Model\Export\Adapter\CsvFactory $csvFactory
+     * @param \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
-     * @param Source\Import\Behavior\Factory $behaviorFactory
+     * @param \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory
      * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
-     * @param History $importHistoryModel
+     * @param \Magento\ImportExport\Model\History $importHistoryModel
      * @param \Magento\Framework\Stdlib\DateTime\DateTime
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Firebear\ImportExport\Model\Source\ConfigInterface $config,
-        \Firebear\ImportExport\Model\Source\Factory $sourceFactory,
+        \Firebear\ImportExport\Helper\Data $helper,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\ImportExport\Helper\Data $importExportData,
@@ -50,7 +58,7 @@ class Import extends \Magento\ImportExport\Model\Import {
         array $data = []
     ) {
         $this->_config = $config;
-        $this->_sourceFactory = $sourceFactory;
+        $this->_helper = $helper;
 
         parent::__construct(
             $logger,
@@ -81,21 +89,13 @@ class Import extends \Magento\ImportExport\Model\Import {
         $result = null;
 
         if($sourceType = $this->getImportSource()) {
-            $sourceClassName = $this->_prepareSourceClassName($sourceType);
-            if ($sourceClassName && class_exists($sourceClassName)) {
-                /** @var $source \Firebear\ImportExport\Model\Source\Type\AbstractType */
-                $source = $this->_sourceFactory->create($sourceClassName);
-                $source->setData($this->getData());
+            $source = $this->_helper->getSourceModelByType($sourceType);
+            $source->setData($this->getData());
 
-                try {
-                    $result = $source->uploadSource();
-                } catch(\Exception $e) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
-                }
-            } else {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __("Import source type class for '%s' is not exist.", $sourceType)
-                );
+            try {
+                $result = $source->uploadSource();
+            } catch(\Exception $e) {
+                throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
             }
         }
 

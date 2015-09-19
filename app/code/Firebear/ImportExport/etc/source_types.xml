@@ -8,6 +8,6 @@
         <field name="file_path" id="file_path" label="File Path" type="text" required="true" />
     </type>
     <type name="url" label="Url" modelInstance="Firebear\ImportExport\Model\Source\Type\Url" sortOrder="30">
-        <field name="url" id="url" label="Url" type="text" required="true" />
+        <field name="file_path" id="file_path" label="Url" type="text" required="true" />
     </type>
 </config>

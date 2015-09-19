@@ -8,8 +8,13 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product {
 
     protected $_request;
 
+    protected $_helper;
+
+    protected $_sourceType;
+
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
+        \Firebear\ImportExport\Helper\Data $helper,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
@@ -46,6 +51,7 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product {
         array $data = []
     ){
         $this->_request = $request;
+        $this->_helper = $helper;
 
         parent::__construct(
             $jsonHelper,
@@ -85,6 +91,14 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product {
         );
     }
 
+    protected function _initSourceType($type)
+    {
+        if(!$this->_sourceType) {
+            $this->_sourceType = $this->_helper->getSourceModelByType($type);
+            $this->_sourceType->setData($this->_parameters);
+        }
+    }
+
     /**
      * Gather and save information about product entities.
      *
@@ -96,6 +110,9 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product {
     protected function _saveProducts()
     {
         /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource */
+        if(isset($this->_parameters['import_source'])) {
+            $this->_initSourceType($this->_parameters['import_source']);
+        }
         $resource = $this->_resourceFactory->create();
         $priceIsGlobal = $this->_catalogData->isPriceGlobal();
         $productLimit = null;
@@ -114,8 +131,8 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product {
             $previousType = null;
             $prevAttributeSet = null;
 
-            if(isset($this->_parameters['import_source']) && $this->_parameters['import_source'] == 'dropbox') {
-                $bunch = $this->_prepareDropboxImages($bunch);
+            if($this->_sourceType) {
+                $bunch = $this->_prepareImagesFromSource($bunch);
             }
             $allImagesFromBunch = $this->_getAllBunchImages($bunch);
             $existingImages = $this->_prepareAllMediaFiles($allImagesFromBunch);
@@ -414,9 +431,8 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product {
         return $this;
     }
 
-    protected function _prepareDropboxImages($bunch)
+    protected function _prepareImagesFromSource($bunch)
     {
-        $dbxClient = new \Dropbox\Client('yjjwzEgxtvgAAAAAAAAkcH_PPvNyBpqoa-j4G-86AA4rtwF_m7-6I24zpIcHfvpX', "PHP-Example/1.0");
         foreach ($bunch as &$rowData) {
             $rowData = $this->_customFieldsMapping($rowData);
             foreach ($this->_imagesArrayKeys as $image) {
@@ -430,16 +446,11 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product {
                     $imageSting = mb_strtolower(
                         $dispersionPath . '/' . preg_replace('/[^a-z0-9\._-]+/i', '', $importImage)
                     );
-                    $filePath = '/var/www/local-magento2.com/magento2/pub/media/import/dropbox' . $imageSting;
-                    $dirname = dirname($filePath);
-                    if (!is_dir($dirname))
-                    {
-                        mkdir($dirname, 0775, true);
+
+                    if($this->_sourceType) {
+                        $this->_sourceType->importImage($importImage, $imageSting);
                     }
-                    $f = fopen($filePath, 'w+b');
-                    $fileMetadata = $dbxClient->getFile('/import/' . $importImage, $f);
-                    $rowData[$image] = 'dropbox' . $imageSting;
-                    fclose($f);
+                    $rowData[$image] = $this->_sourceType->getCode() . $imageSting;
                 }
             }
         }
@@ -468,8 +479,8 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product {
                     $imageSting = mb_strtolower(
                         $dispersionPath . '/' . preg_replace('/[^a-z0-9\._-]+/i', '', $importImage)
                     );
-                    if(isset($this->_parameters['import_source']) && $this->_parameters['import_source'] == 'dropbox') {
-                        $allImagesFromBunch['dropbox' . $imageSting] = $imageSting;
+                    if(isset($this->_parameters['import_source'])) {
+                        $allImagesFromBunch[$this->_sourceType->getCode() . $imageSting] = $imageSting;
                     } else {
                         $allImagesFromBunch[$importImage] = $imageSting;
                     }
