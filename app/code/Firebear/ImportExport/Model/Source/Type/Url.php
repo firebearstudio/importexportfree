@@ -15,7 +15,6 @@ class Url extends AbstractType
     public function uploadSource()
     {
         $fileName = $this->getData($this->_code . '_file_path');
-        var_export($fileName);
         if (preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {
             $url = str_replace($matches[0], '', $fileName);
             $read = $this->_readFactory->create($url, DriverPool::HTTP);
