@@ -12,4 +12,5 @@
         <plugin name="firebear_importexport_source" type="Firebear\ImportExport\Plugin\Model\Import" />
     </type>
     <preference for="Magento\ImportExport\Model\Import" type="Firebear\ImportExport\Plugin\Model\Import" />
+    <preference for="Magento\CatalogImportExport\Model\Import\Product" type="Firebear\ImportExport\Plugin\Model\Import\Product" />
 </config>

@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var $block \Magento\ImportExport\Block\Adminhtml\Import\Edit\Before */
+?>
+<script>
+require(['jquery', 'prototype'], function(jQuery){
+
+//<![CDATA[
+    // Temporary Class will be replaced after refactoring of import/export functionality
+    varienImport.handleEntityTypeSelector = function() {
+        var entity = jQuery('#entity');
+        if (entity && entity.val()) {
+            this.showBehavior(entity.val());
+            this.showImportSource(true);
+            this.showSampleFile(entity.val());
+        } else {
+            this.showBehavior(false);
+            this.showImportSource(false);
+            this.showSampleFile(false);
+        }
+    };
+
+    varienImport.handleImportSourceSelector = function() {
+        var entity = jQuery('#import_source');
+        jQuery('fieldset.source-fieldset').hide();
+        jQuery('.source-fieldset').find('._required').removeClass('required-entry').prop('disabled', true);
+        if (entity && entity.val()) {
+            jQuery('#upload_' + entity.val() + '_fieldset').show();
+            jQuery('#upload_' + entity.val() + '_fieldset').find('._required').addClass('required-entry').prop('disabled', false);
+        }
+    };
+
+    /**
+     * Show upload source dropdown
+     * @param {boolean} isShow
+     */
+    varienImport.showImportSource = function(isShow) {
+        if (isShow == true) {
+            jQuery('#import_source_fieldset').show();
+        } else {
+            jQuery('#import_source_fieldset').hide();
+        }
+        jQuery('.source-fieldset').find('._required').removeClass('required-entry').prop('disabled', true);
+    };
+//]]>
+
+});
+</script>

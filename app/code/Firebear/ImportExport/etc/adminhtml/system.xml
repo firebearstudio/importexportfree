@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Config/etc/system_file.xsd">
+    <system>
+        <tab id="firebear" translate="label" sortOrder="200">
+            <label>Firebear Studio</label>
+        </tab>
+        <section id="firebear_importexport" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Import/Export</label>
+            <tab>firebear</tab>
+            <resource>Firebear_ImportExport::config_importexport</resource>
+            <group id="dropbox" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Dropbox</label>
+                <field id="key" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Application Key</label>
+                </field>
+                <field id="secret" translate="label comment" type="password" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Application Secret Key</label>
+                    <comment><![CDATA[You can find your API keys in your Dropbox <a href="https://www.dropbox.com/developers/apps" target="_blank">App Console</a>]]></comment>
+                </field>
+                <field id="token" translate="label comment" type="password" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Application Access Token</label>
+                    <comment><![CDATA[After save this page you will be redirected to Dropbox website to get your access token]]></comment>
+                </field>
+            </group>
+            <group id="ftp" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>FTP</label>
+                <field id="host" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Host</label>
+                </field>
+                <field id="port" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Port</label>
+                </field>
+                <field id="username" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Username</label>
+                </field>
+                <field id="password" translate="label comment" type="password" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Password</label>
+                    <comment>You will be able to define file path during import/export process</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

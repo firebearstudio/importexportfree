@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="type" type="typeDeclaration" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="typeDeclaration">
+        <xs:sequence>
+            <xs:element name="field" type="fieldDeclaration" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="label" type="xs:string" use="required"/>
+        <xs:attribute name="modelInstance" type="modelName" use="required"/>
+        <xs:attribute name="sortOrder" type="xs:integer" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="fieldDeclaration">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="label" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="required" type="xs:boolean" use="optional"/>
+    </xs:complexType>
+
+    <xs:simpleType name="modelName">
+        <xs:annotation>
+            <xs:documentation>
+                Model name can contain only [a-zA-Z_\\\\].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z_\\\\]+" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
