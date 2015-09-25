@@ -1,4 +1,4 @@
-# Magento2 Improved Import / Export extension  
+# Magento 2 - Improved Import / Export extension  
 
 We actually start work with improve default Magento 2 import and export functionality. Magento 2 Have much more important import features out of box - like import product custom options, product images from remote URL, tier prices etc. Check our Magento 2 Import manual https://firebearstudio.com/blog/the-complete-guide-to-magento-2-product-import-export.html 
 
