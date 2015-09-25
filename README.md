@@ -17,4 +17,4 @@ Improved Import / Export extension for Magento 2 provide possibility import csv 
 
 <img src="https://firebearstudio.com/files/m2import/magento2-dropbox-box-drive-ftp-products-images-import.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" />
 
-<img src="https://firebearstudio.com/files/m2import/magento2-dropbox-box-drive-ftp-products-images-import-configuration.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" />
+<img src="https://firebearstudio.com/files/m2import/magento-import-dropbox.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" />
