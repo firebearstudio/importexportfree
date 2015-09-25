@@ -4,7 +4,7 @@ We actually start work with improve default Magento 2 import and export function
 
 Improved Import / Export extension for Magento 2 provide possibility import csv file with products data and product images to Magento 2 from remote FTP server , cloud storages like Dropbox , Box and Google Drive and make products and images export to same locations. Scheduled cron job configuration provide possibility for automatically products updates from cloud storage where you can upload it from 3th party tools, warehouses, Product Inventory Management (PIM) systems etc. Could be very useful for regular automatic product stock status update as well as any other product attribute in Magento 2.
 
-</h2>Improved Import free features</h2> 
+<h2>Improved Import free features</h2> 
 
 - import product images to Magento 2 from Dropbox, Custom URL, FTP 
 - import csv file with import data from Dropbox,Custom URL, FTP 
