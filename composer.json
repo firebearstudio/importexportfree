@@ -2,7 +2,7 @@
     "name": "firebear/importexport",
     "description": "N/A",
     "replace": {
-        "dropbox/dropbox-sdk": "1.1.6"
+        "dropbox/dropbox-sdk": "1.1.*"
     },
     "require": {
         "php": "~5.5.0|~5.6.0",
@@ -17,9 +17,6 @@
         "GPL-2.0"
     ],
     "extra": {
-        "component_paths": {
-            "dropbox/dropbox-sdk": "lib/internal/Dropbox"
-        },
         "map": [
             ["app/code/Firebear/ImportExport", "Firebear/ImportExport"]
         ]
