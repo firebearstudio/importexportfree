@@ -18,7 +18,10 @@
     ],
     "extra": {
         "map": [
-            "app/code/Firebear/ImportExport", "Firebear/ImportExport"
+            [
+                "app/code/Firebear/ImportExport",
+                "Firebear/ImportExport"
+            ]
         ]
     }
 }
