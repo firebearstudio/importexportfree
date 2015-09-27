@@ -1,6 +1,6 @@
 # Magento 2 - Improved Import / Export extension  
 
-We actually start work with improve default Magento 2 import and export functionality. Magento 2 Have much more important import features out of box - like import product custom options, product images from remote URL, tier prices etc. Check our Magento 2 Import manual https://firebearstudio.com/blog/the-complete-guide-to-magento-2-product-import-export.html 
+We actually start work with improve default Magento 2 import and export functionality. Magento 2 Have much more important import features out of box - like import product custom options, product images from remote URL, tier prices etc. Check our <a href="https://firebearstudio.com/blog/the-complete-guide-to-magento-2-product-import-export.html" title="magento 2 import">Magento 2 Import manual</a>  
 
 Improved Import / Export extension for Magento 2 provide possibility import csv file with products data and product images to Magento 2 from remote FTP server , cloud storages like Dropbox , Box and Google Drive and make products and images export to same locations. Scheduled cron job configuration provide possibility for automatically products updates from cloud storage where you can upload it from 3th party tools, warehouses, Product Inventory Management (PIM) systems etc. Could be very useful for regular automatic product stock status update as well as any other product attribute in Magento 2.
 
