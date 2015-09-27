@@ -15,7 +15,7 @@
     ],
     "extra": {
         "component_paths": [
-            "dropbox/dropbox-sdk", "lib/internal/Dropbox"
+            "dropbox-sdk-php/lib/Dropbox", "lib/internal"
         ],
         "map": [
             "app/code/Firebear/ImportExport", "Firebear/ImportExport"
