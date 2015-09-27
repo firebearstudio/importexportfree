@@ -14,8 +14,11 @@
         "GPL-2.0"
     ],
     "extra": {
+        "component_path": [
+            ["dropbox/dropbox-sdk", "lib/internal/Dropbox"]
+        ],
         "map": [
-            ["app/code/*", ""]
+            ["app/code/Firebear/ImportExport", "Firebear/ImportExport"]
         ]
     }
 }
