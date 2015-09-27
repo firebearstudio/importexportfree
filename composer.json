@@ -1,6 +1,9 @@
 {
     "name": "firebear/importexport",
     "description": "N/A",
+    "replace": {
+        "dropbox/dropbox-sdk": "1.1.6"
+    },
     "require": {
         "php": "~5.5.0|~5.6.0",
         "magento/module-import-export": "~1.0.0",
