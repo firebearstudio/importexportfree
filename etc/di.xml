@@ -4,6 +4,6 @@
  * Copyright © 2015 Firebear Studio. All rights reserved.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Firebear\ImportExport\Model\Source\ConfigInterface" type="Firebear\ImportExport\Model\Source\Config" />
 </config>
