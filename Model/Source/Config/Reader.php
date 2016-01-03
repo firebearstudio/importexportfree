@@ -27,9 +27,9 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem {
         $this->_fileName = $fileName;
         $this->_idAttributes = array_replace($this->_idAttributes, $idAttributes);
         $this->_schemaFile = $schemaLocator->getSchema();
-        $this->_isValidated = $validationState->isValidated();
-        $this->_perFileSchema = $schemaLocator->getPerFileSchema() &&
-        $this->_isValidated ? $schemaLocator->getPerFileSchema() : null;
+        $this->validationState = $validationState;
+        $this->_perFileSchema = $schemaLocator->getPerFileSchema() && $validationState->isValidationRequired()
+            ? $schemaLocator->getPerFileSchema() : null;
         $this->_domDocumentClass = $domDocumentClass;
         $this->_defaultScope = $defaultScope;
     }

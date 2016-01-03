@@ -8,7 +8,7 @@ namespace Firebear\ImportExport\Model\Source\Type;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-abstract class AbstractType extends \Magento\Framework\Object {
+abstract class AbstractType extends \Magento\Framework\DataObject {
 
     const IMPORT_DIR = 'var/import';
 

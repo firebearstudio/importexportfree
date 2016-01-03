@@ -16,6 +16,11 @@ class Ftp extends AbstractType
             $sourceFilePath = $this->getData($this->_code . '_file_path');
             $fileName = basename($sourceFilePath);
             $filePath = $this->_directory->getAbsolutePath($this->getImportPath() . '/' . $fileName);
+
+            $filesystem = new \Magento\Framework\Filesystem\Io\File();
+            $filesystem->setAllowCreateFolders(true);
+            $filesystem->checkAndCreateFolder($this->_directory->getAbsolutePath($this->getImportPath()));
+
             $result = $client->read($sourceFilePath, $filePath);
 
             if($result) {

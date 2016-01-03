@@ -28,7 +28,10 @@ class Form {
         $fileFieldset->setClass('source-fieldset ' . $oldClass);
 
         $types = $this->_config->get();
-        $sources = [['label' => __('-- Please Select --'), 'value' => '']];
+        $sources = [
+            ['label' => __('-- Please Select --'), 'value' => ''],
+            ['label' => __('File'), 'value' => 'file']
+        ];
         foreach ($types as $typeName => $type) {
             $sources[] = ['label' => $type['label'], 'value' => $typeName];
         }

@@ -27,7 +27,6 @@ class Import extends \Magento\ImportExport\Model\Import {
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\ImportExport\Model\Import\ConfigInterface $importConfig
      * @param \Magento\ImportExport\Model\Import\Entity\Factory $entityFactory
-     * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
      * @param \Magento\ImportExport\Model\Export\Adapter\CsvFactory $csvFactory
      * @param \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
@@ -47,12 +46,12 @@ class Import extends \Magento\ImportExport\Model\Import {
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\ImportExport\Model\Import\ConfigInterface $importConfig,
         \Magento\ImportExport\Model\Import\Entity\Factory $entityFactory,
-        \Magento\ImportExport\Model\Resource\Import\Data $importData,
+        \Magento\ImportExport\Model\ResourceModel\Import\Data $importData,
         \Magento\ImportExport\Model\Export\Adapter\CsvFactory $csvFactory,
         \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory,
         \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\ImportExport\Model\History $importHistoryModel,
         \Magento\Framework\Stdlib\DateTime\DateTime $localeDate,
         array $data = []
@@ -88,7 +87,8 @@ class Import extends \Magento\ImportExport\Model\Import {
     {
         $result = null;
 
-        if($sourceType = $this->getImportSource()) {
+        if($this->getImportSource() && $this->getImportSource() != 'file') {
+            $sourceType = $this->getImportSource();
             $source = $this->_helper->getSourceModelByType($sourceType);
             $source->setData($this->getData());
 
