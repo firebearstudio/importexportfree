@@ -20,7 +20,6 @@ The paid one adds:
 - Scheduled cron job for csv file import from all supported sources. This is a great solution for keeping product stocks and data updated automatically. 
 - CSV file product export to Box, Google Drive, Dropbox, or other sources via FTP
 - Product images export to Box, Google Drive, Dropbox, or other sources via FTP
-- Import categories only from separated CSV file 
 
 <img src="https://firebearstudio.com/files/m2import/magento2-dropbox-box-drive-ftp-products-images-import.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" />
 
