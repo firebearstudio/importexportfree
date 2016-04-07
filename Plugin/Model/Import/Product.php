@@ -52,7 +52,8 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product {
         ObjectRelationProcessor $objectRelationProcessor,
         TransactionManagerInterface $transactionManager,
         \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor $taxClassProcessor,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Catalog\Model\Product\Url $productUrl,
         array $data = []
     ){
         $this->_request = $request;
@@ -93,7 +94,8 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product {
             $objectRelationProcessor,
             $transactionManager,
             $taxClassProcessor,
-            $metadataPool,
+            $scopeConfig,
+            $productUrl,
             $data
         );
     }
