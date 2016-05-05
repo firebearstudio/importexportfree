@@ -6,8 +6,11 @@ use Magento\CatalogImportExport\Model\Import\Product as MagentoProduct;
 use Magento\ImportExport\Model\Import;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 
-class Product extends \Magento\CatalogImportExport\Model\Import\Product {
+class Product extends \Magento\CatalogImportExport\Model\Import\Product
+{
 
     protected $_request;
 
@@ -119,10 +122,9 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product {
     protected function _saveProducts()
     {
         /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource */
-        if(isset($this->_parameters['import_source'])) {
+        if (isset($this->_parameters['import_source']) && $this->_parameters['import_source'] != 'file') {
             $this->_initSourceType($this->_parameters['import_source']);
         }
-        $resource = $this->_resourceFactory->create();
         $priceIsGlobal = $this->_catalogData->isPriceGlobal();
         $productLimit = null;
         $productsQty = null;
@@ -136,11 +138,10 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product {
             $tierPrices = [];
             $groupPrices = [];
             $mediaGallery = [];
-            $uploadedGalleryFiles = [];
             $previousType = null;
             $prevAttributeSet = null;
 
-            if($this->_sourceType) {
+            if ($this->_sourceType) {
                 $bunch = $this->_prepareImagesFromSource($bunch);
             }
             $bunchImages = $this->getBunchImages($bunch);
@@ -454,7 +455,7 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product {
                     $imageSting = mb_strtolower(
                         $dispersionPath . '/' . preg_replace('/[^a-z0-9\._-]+/i', '', $importImage)
                     );
-                    if(isset($this->_parameters['import_source'])) {
+                    if (isset($this->_parameters['import_source']) && $this->_parameters['import_source'] != 'file') {
                         $allImagesFromBunch[$this->_sourceType->getCode() . $imageSting] = $imageSting;
                     } else {
                         $allImagesFromBunch[$importImage] = $imageSting;
