@@ -384,7 +384,7 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
                 }
             }
 
-            $this->_saveProductEntity(
+            $this->saveProductEntity(
                 $entityRowsIn,
                 $entityRowsUp
             )->_saveProductWebsites(
