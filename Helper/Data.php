@@ -39,7 +39,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             return $source;
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __("Import source type class for '%s' is not exist.", $sourceType)
+                __("Import source type class for '" . $sourceType . "' is not exist.")
             );
         }
     }

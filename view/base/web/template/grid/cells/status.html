@@ -1,0 +1,18 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="data-grid-cell-content">
+    <span data-bind="if: $col.getIsActive($row())">
+        <span class="grid-severity-notice">
+            <span data-bind="html: $col.getLabel($row())" />
+        </span>
+    </span>
+    <span data-bind="ifnot: $col.getIsActive($row())">
+        <span class="grid-severity-major">
+            <span data-bind="html: $col.getLabel($row())" />
+        </span>
+    </span>
+</div>

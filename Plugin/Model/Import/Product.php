@@ -1,6 +1,7 @@
 <?php
 namespace Firebear\ImportExport\Plugin\Model\Import;
 
+use Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\CatalogImportExport\Model\Import\Product as MagentoProduct;
 use Magento\ImportExport\Model\Import;
@@ -8,16 +9,111 @@ use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;//temp
 
-class Product extends \Magento\CatalogImportExport\Model\Import\Product
-{
+class Product extends \Magento\CatalogImportExport\Model\Import\Product {
 
+    /**
+     * Default website id
+     */
+    const DEFAULT_WEBSITE_ID = 1;
+
+    /**
+     * Used when create new attributes in column name
+     */
+    const ATTRIBUTE_SET_GROUP = 'attribute_set_group';
+
+    /**
+     * Attribute sets column name
+     */
+    const ATTRIBUTE_SET_COLUMN = 'attribute_set';
+
+    /**
+     * @var \Magento\Framework\App\Request\Http
+     */
     protected $_request;
 
+    /**
+     * @var \Firebear\ImportExport\Helper\Data
+     */
     protected $_helper;
 
+    /**
+     * @var \Firebear\ImportExport\Model\Source\Type\AbstractType
+     */
     protected $_sourceType;
 
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
+     */
+    protected $attributeFactory;
+
+    /**
+     * @var \Magento\Eav\Model\EntityFactory
+     */
+    protected $eavEntityFactory;
+
+    /**
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory
+     */
+    protected $groupCollectionFactory;
+
+    /**
+     * @var array
+     */
+    protected $_attributeSetGroupCache;
+
+    /**
+     * @var \Magento\Catalog\Helper\Product
+     */
+    protected $productHelper;
+
+    protected $output;//temp
+
+    /**
+     * @param \Magento\Framework\App\Request\Http                                          $request
+     * @param \Firebear\ImportExport\Helper\Data                                           $helper
+     * @param \Magento\Framework\Json\Helper\Data                                          $jsonHelper
+     * @param \Magento\ImportExport\Helper\Data                                            $importExportData
+     * @param \Magento\ImportExport\Model\ResourceModel\Import\Data                        $importData
+     * @param \Magento\Eav\Model\Config                                                    $config
+     * @param \Magento\Framework\App\ResourceConnection                                    $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper                             $resourceHelper
+     * @param \Magento\Framework\Stdlib\StringUtils                                        $string
+     * @param ProcessingErrorAggregatorInterface                                           $errorAggregator
+     * @param \Magento\Framework\Event\ManagerInterface                                    $eventManager
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface                         $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface                    $stockConfiguration
+     * @param \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface              $stockStateProvider
+     * @param \Magento\Catalog\Helper\Data                                                 $catalogData
+     * @param Import\Config                                                                $importConfig
+     * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory
+     * @param MagentoProduct\OptionFactory                                                 $optionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory      $setColFactory
+     * @param MagentoProduct\Type\Factory                                                  $productTypeFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\LinkFactory                     $linkFactory
+     * @param \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory               $proxyProdFactory
+     * @param \Magento\CatalogImportExport\Model\Import\UploaderFactory                    $uploaderFactory
+     * @param \Magento\Framework\Filesystem                                                $filesystem
+     * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory              $stockResItemFac
+     * @param DateTime\TimezoneInterface                                                   $localeDate
+     * @param DateTime                                                                     $dateTime
+     * @param LoggerInterface                                                     $logger
+     * @param \Magento\Framework\Indexer\IndexerRegistry                                   $indexerRegistry
+     * @param MagentoProduct\StoreResolver                                                 $storeResolver
+     * @param MagentoProduct\SkuProcessor                                                  $skuProcessor
+     * @param MagentoProduct\CategoryProcessor                                             $categoryProcessor
+     * @param MagentoProduct\Validator                                                     $validator
+     * @param ObjectRelationProcessor                                                      $objectRelationProcessor
+     * @param TransactionManagerInterface                                                  $transactionManager
+     * @param TaxClassProcessor                                             $taxClassProcessor
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface                           $scopeConfig
+     * @param \Magento\Catalog\Model\Product\Url                                           $productUrl
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory                    $attributeFactory
+     * @param array                                                                        $data
+     */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
         \Firebear\ImportExport\Helper\Data $helper,
@@ -46,7 +142,7 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
         \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $stockResItemFac,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         DateTime $dateTime,
-        \Psr\Log\LoggerInterface $logger,
+        LoggerInterface $logger,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
         \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor $skuProcessor,
@@ -54,13 +150,21 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
         \Magento\CatalogImportExport\Model\Import\Product\Validator $validator,
         ObjectRelationProcessor $objectRelationProcessor,
         TransactionManagerInterface $transactionManager,
-        \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor $taxClassProcessor,
+        TaxClassProcessor $taxClassProcessor,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\Url $productUrl,
+        \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory,
+        \Magento\Eav\Model\EntityFactory $eavEntityFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
+        \Magento\Catalog\Helper\Product $productHelper,
         array $data = []
     ){
         $this->_request = $request;
         $this->_helper = $helper;
+        $this->attributeFactory = $attributeFactory;
+        $this->eavEntityFactory = $eavEntityFactory;
+        $this->groupCollectionFactory = $groupCollectionFactory;
+        $this->productHelper = $productHelper;
 
         parent::__construct(
             $jsonHelper,
@@ -103,9 +207,15 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
         );
     }
 
+    /**
+     * Initialize source type model
+     *
+     * @param $type
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     protected function _initSourceType($type)
     {
-        if(!$this->_sourceType) {
+        if (!$this->_sourceType) {
             $this->_sourceType = $this->_helper->getSourceModelByType($type);
             $this->_sourceType->setData($this->_parameters);
         }
@@ -136,19 +246,21 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
             $this->websitesCache = [];
             $this->categoriesCache = [];
             $tierPrices = [];
-            $groupPrices = [];
             $mediaGallery = [];
+            $uploadedImages = [];
             $previousType = null;
             $prevAttributeSet = null;
 
             if ($this->_sourceType) {
                 $bunch = $this->_prepareImagesFromSource($bunch);
             }
-            $bunchImages = $this->getBunchImages($bunch);
-            $existingImages = $this->getExistingImages($bunchImages);
 
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->validateRow($rowData, $rowNum)) {
+                    continue;
+                }
+                if ($this->getErrorAggregator()->hasToBeTerminated()) {
+                    $this->getErrorAggregator()->addRowToSkip($rowNum);
                     continue;
                 }
                 $rowScope = $this->getRowScope($rowData);
@@ -209,10 +321,12 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
                 if (!array_key_exists($rowSku, $this->categoriesCache)) {
                     $this->categoriesCache[$rowSku] = [];
                 }
+                $rowData['rowNum'] = $rowNum;
                 $categoryIds = $this->processRowCategories($rowData);
                 foreach ($categoryIds as $id) {
                     $this->categoriesCache[$rowSku][$id] = true;
                 }
+                unset($rowData['rowNum']);
 
                 // 4.1. Tier prices phase
                 if (!empty($rowData['_tier_price_website'])) {
@@ -224,22 +338,6 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
                         'value' => $rowData['_tier_price_price'],
                         'website_id' => self::VALUE_ALL == $rowData['_tier_price_website'] ||
                         $priceIsGlobal ? 0 : $this->storeResolver->getWebsiteCodeToId($rowData['_tier_price_website']),
-                    ];
-                }
-
-                if (!$this->validateRow($rowData, $rowNum)) {
-                    continue;
-                }
-
-                // 4.2. Group prices phase
-                if (!empty($rowData['_group_price_website'])) {
-                    $groupPrices[$rowSku][] = [
-                        'all_groups' => $rowData['_group_price_customer_group'] == self::VALUE_ALL,
-                        'customer_group_id' => $rowData['_group_price_customer_group'] ==
-                        self::VALUE_ALL ? 0 : $rowData['_group_price_customer_group'],
-                        'value' => $rowData['_group_price_price'],
-                        'website_id' => self::VALUE_ALL == $rowData['_group_price_website'] ||
-                        $priceIsGlobal ? 0 : $this->storeResolver->getWebsiteCodeToId($rowData['_group_price_website']),
                     ];
                 }
 
@@ -279,8 +377,7 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
                             $rowData[$column] = $uploadedFile;
                         }
 
-                        $imageNotAssigned = !isset($existingImages[$uploadedFile])
-                            || !in_array($rowSku, $existingImages[$uploadedFile]);
+                        $imageNotAssigned = !isset($existingImages[$rowSku][$uploadedFile]);
 
                         if ($uploadedFile && $imageNotAssigned) {
                             if ($column == self::COL_MEDIA_IMAGE) {
@@ -293,7 +390,7 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
                                 'disabled' => isset($disabledImages[$columnImage]) ? '1' : '0',
                                 'value' => $uploadedFile,
                             ];
-                            $existingImages[$uploadedFile][] = $rowSku;
+                            $existingImages[$rowSku][$uploadedFile] = true;
                         }
                     }
                 }
@@ -303,7 +400,7 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
                     ? $this->storeResolver->getStoreCodeToId($rowData[self::COL_STORE])
                     : 0;
                 $productType = isset($rowData[self::COL_TYPE]) ? $rowData[self::COL_TYPE] : null;
-                if (!is_null($productType)) {
+                if ($productType !== null) {
                     $previousType = $productType;
                 }
                 if (isset($rowData[self::COL_ATTR_SET])) {
@@ -311,13 +408,13 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
                 }
                 if (self::SCOPE_NULL == $rowScope) {
                     // for multiselect attributes only
-                    if (!is_null($prevAttributeSet)) {
+                    if ($prevAttributeSet !== null) {
                         $rowData[self::COL_ATTR_SET] = $prevAttributeSet;
                     }
-                    if (is_null($productType) && !is_null($previousType)) {
+                    if ($productType === null && $previousType !== null) {
                         $productType = $previousType;
                     }
-                    if (is_null($productType)) {
+                    if ($productType === null) {
                         continue;
                     }
                 }
@@ -384,10 +481,18 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
                 }
             }
 
-            $this->_saveProductEntity(
-                $entityRowsIn,
-                $entityRowsUp
-            )->_saveProductWebsites(
+            if (method_exists($this, '_saveProductEntity')) {
+                $this->_saveProductEntity(
+                    $entityRowsIn,
+                    $entityRowsUp
+                );
+            } else {
+                $this->saveProductEntity(
+                    $entityRowsIn,
+                    $entityRowsUp
+                );
+            }
+            $this->_saveProductWebsites(
                 $this->websitesCache
             )->_saveProductCategories(
                 $this->categoriesCache
@@ -407,6 +512,82 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
         return $this;
     }
 
+    /**
+     * Stock item saving.
+     *
+     * @return $this
+     */
+    protected function _saveStockItem()
+    {
+        $indexer = $this->indexerRegistry->get('catalog_product_category');
+        /** @var $stockResource \Magento\CatalogInventory\Model\ResourceModel\Stock\Item */
+        $stockResource = $this->_stockResItemFac->create();
+        $entityTable = $stockResource->getMainTable();
+        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            $stockData = [];
+            $productIdsToReindex = [];
+            // Format bunch to stock data rows
+            foreach ($bunch as $rowNum => $rowData) {
+                if (!$this->isRowAllowedToImport($rowData, $rowNum)) {
+                    continue;
+                }
+
+                $row = [];
+                $row['product_id'] = $this->skuProcessor->getNewSku($rowData[self::COL_SKU])['entity_id'];
+                $productIdsToReindex[] = $row['product_id'];
+
+                $row['website_id'] = $this->stockConfiguration->getDefaultScopeId();
+                $row['stock_id'] = $this->stockRegistry->getStock($row['website_id'])->getStockId();
+
+                $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
+                $existStockData = $stockItemDo->getData();
+
+                $row = array_merge(
+                    $this->defaultStockData,
+                    array_intersect_key($existStockData, $this->defaultStockData),
+                    array_intersect_key($rowData, $this->defaultStockData),
+                    $row
+                );
+
+                if ($this->stockConfiguration->isQty(
+                    $this->skuProcessor->getNewSku($rowData[self::COL_SKU])['type_id']
+                )) {
+                    $stockItemDo->setData($row);
+                    $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
+                    if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
+                        $row['low_stock_date'] = $this->dateTime->gmDate(
+                            'Y-m-d H:i:s',
+                            (new \DateTime())->getTimestamp()
+                        );
+                    }
+                    $row['stock_status_changed_auto'] =
+                        (int) !$this->stockStateProvider->verifyStock($stockItemDo);
+                } else {
+                    $row['qty'] = 0;
+                }
+                if (!isset($stockData[$rowData[self::COL_SKU]])) {
+                    $stockData[$rowData[self::COL_SKU]] = $row;
+                }
+            }
+
+            // Insert rows
+            if (!empty($stockData)) {
+                $this->_connection->insertOnDuplicate($entityTable, array_values($stockData));
+            }
+
+            if ($productIdsToReindex) {
+                $indexer->reindexList($productIdsToReindex);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Import images via initialized source type
+     *
+     * @param $bunch
+     * @return mixed
+     */
     protected function _prepareImagesFromSource($bunch)
     {
         foreach ($bunch as &$rowData) {
@@ -423,7 +604,7 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
                         $dispersionPath . '/' . preg_replace('/[^a-z0-9\._-]+/i', '', $importImage)
                     );
 
-                    if($this->_sourceType) {
+                    if ($this->_sourceType) {
                         $this->_sourceType->importImage($importImage, $imageSting);
                     }
                     $rowData[$image] = $this->_sourceType->getCode() . $imageSting;
@@ -476,7 +657,7 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
     private function _customFieldsMapping($rowData)
     {
         foreach ($this->_fieldsMap as $systemFieldName => $fileFieldName) {
-            if (isset($rowData[$fileFieldName])) {
+            if (array_key_exists($fileFieldName, $rowData)) {
                 $rowData[$systemFieldName] = $rowData[$fileFieldName];
             }
         }
@@ -484,10 +665,12 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
         $rowData = $this->_parseAdditionalAttributes($rowData);
 
         $rowData = $this->_setStockUseConfigFieldsValues($rowData);
-        if (isset($rowData['status'])) {
-            if (($rowData['status'] == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) || $rowData['status'] == 'yes') {
+        if (array_key_exists('status', $rowData)
+            && $rowData['status'] != \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        ) {
+            if ($rowData['status'] == 'yes') {
                 $rowData['status'] = \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
-            } else {
+            } elseif (!empty($rowData['status']) || $this->getRowScope($rowData) == self::SCOPE_DEFAULT) {
                 $rowData['status'] = \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED;
             }
         }
@@ -507,11 +690,16 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
             return $rowData;
         }
 
-        $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $rowData['additional_attributes']);
-        foreach ($attributeNameValuePairs as $attributeNameValuePair) {
-            $nameAndValue = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeNameValuePair);
-            if (!empty($nameAndValue)) {
-                $rowData[$nameAndValue[0]] = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
+        $valuePairs = explode($this->getMultipleValueSeparator(), $rowData['additional_attributes']);
+        foreach ($valuePairs as $valuePair) {
+            $separatorPosition = strpos($valuePair, self::PAIR_NAME_VALUE_SEPARATOR);
+            if ($separatorPosition !== false) {
+                $key = substr($valuePair, 0, $separatorPosition);
+                $value = substr(
+                    $valuePair,
+                    $separatorPosition + strlen(self::PAIR_NAME_VALUE_SEPARATOR)
+                );
+                $rowData[$key] = $value === false ? '' : $value;
             }
         }
         return $rowData;
@@ -526,10 +714,15 @@ class Product extends \Magento\CatalogImportExport\Model\Import\Product
      */
     private function _setStockUseConfigFieldsValues($rowData)
     {
-        $useConfigFields = array();
+        $useConfigFields = [];
         foreach ($rowData as $key => $value) {
-            if (isset($this->defaultStockData[$key]) && isset($this->defaultStockData[self::INVENTORY_USE_CONFIG_PREFIX . $key]) && !empty($value)) {
-                $useConfigFields[self::INVENTORY_USE_CONFIG_PREFIX . $key] = ($value == self::INVENTORY_USE_CONFIG) ? 1 : 0;
+            if (
+                isset($this->defaultStockData[$key])
+                && isset($this->defaultStockData[self::INVENTORY_USE_CONFIG_PREFIX . $key])
+                && !empty($value)
+            ) {
+                $fullKey = self::INVENTORY_USE_CONFIG_PREFIX . $key;
+                $useConfigFields[$fullKey] = ($value == self::INVENTORY_USE_CONFIG) ? 1 : 0;
             }
         }
         $rowData = array_merge($rowData, $useConfigFields);

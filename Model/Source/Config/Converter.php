@@ -40,12 +40,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     continue;
                 }
 
-                $result[$typeName]['fields'][$childNode->attributes->getNamedItem('name')->nodeValue] = array(
+                $result[$typeName]['fields'][$childNode->attributes->getNamedItem('name')->nodeValue] = [
                     'id' => $childNode->attributes->getNamedItem('id')->nodeValue,
                     'label' => $childNode->attributes->getNamedItem('label')->nodeValue,
                     'type' => $childNode->attributes->getNamedItem('type')->nodeValue,
-                    'required' => ($childNode->attributes->getNamedItem('required')) ? $childNode->attributes->getNamedItem('required')->nodeValue : false,
-                );
+                    'required' => ($childNode->attributes->getNamedItem('required'))
+                        ? $childNode->attributes->getNamedItem('required')->nodeValue : false,
+                ];
             }
         }
 

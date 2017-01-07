@@ -17,16 +17,9 @@
             <resource>Firebear_ImportExport::config_importexport</resource>
             <group id="dropbox" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Dropbox</label>
-                <field id="key" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Application Key</label>
-                </field>
-                <field id="secret" translate="label comment" type="password" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Application Secret Key</label>
-                    <comment><![CDATA[You can find your API keys in your Dropbox <a href="https://www.dropbox.com/developers/apps" target="_blank">App Console</a>]]></comment>
-                </field>
                 <field id="token" translate="label comment" type="password" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Application Access Token</label>
-                    <comment><![CDATA[After save this page you will be redirected to Dropbox website to get your access token]]></comment>
+                    <comment><![CDATA[You can generate Access Token in your Dropbox <a href="https://www.dropbox.com/developers/apps" target="_blank">App Console</a>. Don’t share your access token with anyone!]]></comment>
                 </field>
             </group>
             <group id="ftp" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">

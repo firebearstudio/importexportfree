@@ -6,21 +6,41 @@
 
 namespace Firebear\ImportExport\Plugin\Block\Import;
 
+/**
+ * Class Form
+ * @package Firebear\ImportExport\Plugin\Block\Import
+ */
 class Form {
 
+    /**
+     * @var \Firebear\ImportExport\Model\Source\ConfigInterface|null
+     */
     protected $_config = null;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $_scopeConfig;
 
+    /**
+     * @param \Firebear\ImportExport\Model\Source\ConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface  $scopeConfig
+     */
     public function __construct(
         \Firebear\ImportExport\Model\Source\ConfigInterface $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    )
-    {
+    ) {
         $this->_config = $config;
         $this->_scopeConfig = $scopeConfig;
     }
 
+    /**
+     * Add import source fieldset to default import form
+     *
+     * @param \Magento\ImportExport\Block\Adminhtml\Import\Edit\Form $subject
+     * @param                                                        $form
+     * @return array
+     */
     public function beforeSetForm(\Magento\ImportExport\Block\Adminhtml\Import\Edit\Form $subject, $form)
     {
         $fileFieldset = $form->getElement('upload_file_fieldset');
@@ -65,6 +85,10 @@ class Form {
 
 
             foreach ($type['fields'] as $fieldName => $field) {
+                if ($fieldName != 'file_path') {
+                    continue;
+                }
+
                 $fieldsets[$typeName]->addField(
                     $typeName . '_' . $fieldName,
                     $field['type'],

@@ -6,4 +6,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Firebear\ImportExport\Model\Source\ConfigInterface" type="Firebear\ImportExport\Model\Source\Config" />
+    <preference for="Magento\ImportExport\Model\Import" type="Firebear\ImportExport\Plugin\Model\Import" />
+    <preference for="Magento\CatalogImportExport\Model\Import\Product" type="Firebear\ImportExport\Plugin\Model\Import\Product" />
+    <preference for="Magento\CatalogImportExport\Model\Import\Product\Validator" type="Firebear\ImportExport\Plugin\Model\Import\Product\Validator" />
+    <preference for="Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable" type="Firebear\ImportExport\Model\Import\Product\Type\Downloadable" />
+
+    <type name="Magento\ImportExport\Model\Import">
+        <plugin name="firebear_importexport_source" type="Firebear\ImportExport\Plugin\Model\Import" />
+    </type>
 </config>
