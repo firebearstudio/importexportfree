@@ -24,6 +24,7 @@ The paid one adds:
 - Import product attaibutes and attribute values on the fly creation 
 - Import downloadable products 
 - Import fields mapping (in Magento 1.x style!) – you can map Magento 2 product attributes to any custom CSV column in your file! Fully flexible and powerful way to import custom data structures in Magento!
+- Full covarage by unit and integrations tests 
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/blog/wp-content/uploads/2016/05/Unbenannt-1.gif"></a>
 
