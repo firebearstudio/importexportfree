@@ -24,7 +24,6 @@ The paid one adds:
 - Import product attaibutes and attribute values on the fly creation 
 - Import downloadable products 
 - Import fields mapping (in Magento 1.x style!) – you can map Magento 2 product attributes to any custom CSV column in your file! Fully flexible and powerful way to import custom data structures in Magento!
-- Full covarage by unit and integrations tests 
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/blog/wp-content/uploads/2016/05/Unbenannt-1.gif"></a>
 
@@ -49,6 +48,7 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>Custom data structure mapping for categories, customers, discount codes, catalog price rules, import! Full flexibility of data import to Magento 2!</li>
 	<li>Product data auto translation during import by Google or Bing - great for import to different store views;</li>
 	<li>Integration with API of data crawling services, such as https://www.import.io/. Crawl product data from any source and import it directly to Magento 2 - this oppens nearly endless possibilities!</li>
+	<li>Full covarage by unit and integrations tests </li>
 </ul>
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/files/m2import/magento2-dropbox-box-drive-ftp-products-images-import.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" /></a>
