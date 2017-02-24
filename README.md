@@ -20,10 +20,21 @@ The paid one adds:
 - Scheduled cron job for csv file import from all supported sources. This is a great solution for keeping product stocks and data updated automatically. 
 - CSV file product export to Box, Google Drive, Dropbox, or other sources via FTP
 - Product images export to Box, Google Drive, Dropbox, or other sources via FTP
-- Import categories only from separated CSV file 
+- Dedicated simple categories import from CSV file (by default in M2 categories can be imported only together with assigned products)
+- Import product attaibutes and attribute values on the fly creation 
+- Import downloadable products 
+- Import fields mapping (in Magento 1.x style!) – you can map Magento 2 product attributes to any custom CSV column in your file! Fully flexible and powerful way to import custom data structures in Magento!
 
-<img src="https://firebearstudio.com/files/m2import/magento2-dropbox-box-drive-ftp-products-images-import.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" />
+<a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/blog/wp-content/uploads/2016/05/Unbenannt-1.gif"></a>
+
+<a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import">
+<h2>Buy Improved Import for Magento</h2>
+<img width="300" src="https://firebearstudio.com/blog/wp-content/uploads/2016/05/module_logos3-1.jpg" /></a>
+
+<a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/files/m2import/magento2-dropbox-box-drive-ftp-products-images-import.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" /></a>
 
 <img src="https://firebearstudio.com/files/m2import/magento-import-dropbox.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" />
 
 For further information, read this post: <a href="https://firebearstudio.com/blog/the-improved-import-export-magento-2-extension-by-firebear.html" title="The Improved Import / Export Magento 2 Extension by Firebear" ><strong>The Improved Import / Export Magento 2 Extension by Firebear</strong></a>
+
+<a href="https://firebearstudio.com/blog/improved-import-magento-2-extension-manual.html"><b>Improved Import Extension manual and integration guide</b></a>
