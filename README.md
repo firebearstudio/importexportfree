@@ -48,6 +48,7 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>Custom data structure mapping for categories, customers, discount codes, catalog price rules, import! Full flexibility of data import to Magento 2!</li>
 	<li>Product data auto translation during import by Google or Bing - great for import to different store views;</li>
 	<li>Integration with API of data crawling services, such as https://www.import.io/. Crawl product data from any source and import it directly to Magento 2 - this oppens nearly endless possibilities!</li>
+	<li>MS Excel XLSX files native import and mapping - processing of complex Excel files with multiple pages, flexible file files mapping to Magento 2 products , customers and orders striucture </li>
 	<li>Full covarage by unit and integrations tests </li>
 </ul>
 
