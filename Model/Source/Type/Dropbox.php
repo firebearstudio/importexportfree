@@ -1,12 +1,21 @@
 <?php
 /**
  * @copyright: Copyright © 2015 Firebear Studio. All rights reserved.
- * @author: Firebear Studio <fbeardev@gmail.com>
+ * @author   : Firebear Studio <fbeardev@gmail.com>
  */
+
 namespace Firebear\ImportExport\Model\Source\Type;
 
+use Dropbox\Client;
+use Dropbox\Exception_BadResponseCode;
+use Dropbox\Exception_OverQuota;
+use Dropbox\Exception_RetryLater;
+use Dropbox\Exception_ServerError;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class Dropbox
+ */
 class Dropbox extends AbstractType
 {
     /**
@@ -23,22 +32,21 @@ class Dropbox extends AbstractType
      * Download remote source file to temporary directory
      *
      * @return string
-     * @throws \Dropbox\Exception_BadResponseCode
-     * @throws \Dropbox\Exception_OverQuota
-     * @throws \Dropbox\Exception_RetryLater
-     * @throws \Dropbox\Exception_ServerError
+     * @throws Exception_BadResponseCode
+     * @throws Exception_OverQuota
+     * @throws Exception_RetryLater
+     * @throws Exception_ServerError
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function uploadSource()
     {
-        if ($client = $this->_getSourceClient()) {
+        if($client = $this->_getSourceClient()) {
             $sourceFilePath = $this->getData($this->_code . '_file_path');
             $fileName = basename($sourceFilePath);
             $filePath = $this->_directory->getAbsolutePath($this->getImportVarPath() . '/' . $fileName);
-
             try {
                 $dirname = dirname($filePath);
-                if (!is_dir($dirname)) {
+                if(!is_dir($dirname)) {
                     mkdir($dirname, 0775, true);
                 }
                 $file = fopen($filePath, 'w+b');
@@ -52,7 +60,7 @@ class Dropbox extends AbstractType
             }
             $fileMetadata = $client->getFile($sourceFilePath, $file);
             fclose($file);
-            if ($fileMetadata) {
+            if($fileMetadata) {
                 return $this->_directory->getRelativePath($this->getImportPath() . '/' . $fileName);
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(__("File not found on Dropbox"));
@@ -68,24 +76,24 @@ class Dropbox extends AbstractType
      * @param $importImage
      * @param $imageSting
      *
-     * @throws \Dropbox\Exception_BadResponseCode
-     * @throws \Dropbox\Exception_OverQuota
-     * @throws \Dropbox\Exception_RetryLater
-     * @throws \Dropbox\Exception_ServerError
+     * @return mixed|void
+     * @throws Exception_BadResponseCode
+     * @throws Exception_OverQuota
+     * @throws Exception_RetryLater
+     * @throws Exception_ServerError
      */
     public function importImage($importImage, $imageSting)
     {
-        if ($client = $this->_getSourceClient()) {
+        if($client = $this->_getSourceClient()) {
             $filePath = $this->_directory->getAbsolutePath($this->getMediaImportPath() . $imageSting);
             $sourceFilePath = $this->getData($this->_code . '_file_path');
             $sourceDir = dirname($sourceFilePath);
             $dirname = dirname($filePath);
-            if (!is_dir($dirname)) {
+            if(!is_dir($dirname)) {
                 mkdir($dirname, 0775, true);
             }
             $file = fopen($filePath, 'w+b');
-
-            if ($filePath) {
+            if($filePath) {
                 $client->getFile($sourceDir . '/' . $importImage, $file);
             }
             fclose($file);
@@ -99,15 +107,14 @@ class Dropbox extends AbstractType
      */
     public function getAccessToken()
     {
-        if (!$this->_accessToken) {
-
+        if(!$this->_accessToken) {
             /**
              * Data sent by cron job
              * @see \Firebear\ImportExport\Plugin\Model\Import::uploadSource()
              *
              * else get token from admin config if import processed directly via admin panel
              */
-            if ($token = $this->getData('access_token')) {
+            if($token = $this->getData('access_token')) {
                 $this->_accessToken = $token;
             } else {
                 $this->_accessToken = $this->_scopeConfig->getValue(
@@ -137,14 +144,14 @@ class Dropbox extends AbstractType
     /**
      * Prepare and return API client
      *
-     * @return \Dropbox\Client
+     * @return Client
      */
     protected function _getSourceClient()
     {
-        if (!$this->_client) {
+        if(!$this->_client) {
             $accessToken = $this->getAccessToken();
-            if ($accessToken) {
-                $this->_client = new \Dropbox\Client($accessToken, "PHP-Example/1.0");
+            if($accessToken) {
+                $this->_client = new Client($accessToken, "PHP-Example/1.0");
             }
         }
 

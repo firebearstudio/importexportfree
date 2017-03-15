@@ -2,6 +2,7 @@
 /**
  * Copyright © 2016 Firebear Studio. All rights reserved.
  */
+
 namespace Firebear\ImportExport\Model\Import\Product\Type;
 
 /**
@@ -13,6 +14,7 @@ class Downloadable extends \Magento\DownloadableImportExport\Model\Import\Produc
      * Get fill data options with key link
      *
      * @param array $options
+     *
      * @return array
      */
     protected function fillDataTitleLink(array $options)
@@ -32,7 +34,7 @@ class Downloadable extends \Magento\DownloadableImportExport\Model\Import\Produc
                 'link_type',
                 'sample_url',
                 'sample_file',
-                'sample_type'
+                'sample_type',
             ]
         );
         $select->joinLeft(
@@ -45,13 +47,13 @@ class Downloadable extends \Magento\DownloadableImportExport\Model\Import\Produc
             $this->productIds
         );
         $existingOptions = $this->connection->fetchAll($select);
-        foreach ($options as $option) {
+        foreach($options as $option) {
             $existOption = $this->downloadableHelper->fillExistOptions(
                 $this->dataLinkTitle,
                 $option,
                 $existingOptions
             );
-            if (!empty($existOption)) {
+            if(!empty($existOption)) {
                 $result['title'][] = $existOption;
             }
             $existOption = $this->downloadableHelper->fillExistOptions(
@@ -59,10 +61,11 @@ class Downloadable extends \Magento\DownloadableImportExport\Model\Import\Produc
                 $option,
                 $existingOptions
             );
-            if (!empty($existOption)) {
+            if(!empty($existOption)) {
                 $result['price'][] = $existOption;
             }
         }
+
         return $result;
     }
 
@@ -72,7 +75,8 @@ class Downloadable extends \Magento\DownloadableImportExport\Model\Import\Produc
      *
      * @param string $fileName
      * @param string $type
-     * @param bool $renameFileOff
+     * @param bool   $renameFileOff
+     *
      * @return string
      */
     protected function uploadDownloadableFiles($fileName, $type = 'links', $renameFileOff = false)
@@ -82,12 +86,14 @@ class Downloadable extends \Magento\DownloadableImportExport\Model\Import\Produc
                 $type,
                 $this->_entityModel->getParameters()
             )->move($fileName, $renameFileOff);
+
             return $res['file'];
-        } catch (\Exception $e) {
+        } catch(\Exception $e) {
             $this->_entityModel->addRowError(
                 $this->_messageTemplates[self::ERROR_MOVE_FILE] . '. ' . $e->getMessage(),
                 $this->rowNum
             );
+
             return '';
         }
     }

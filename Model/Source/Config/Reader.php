@@ -1,22 +1,41 @@
 <?php
 /**
  * @copyright: Copyright © 2015 Firebear Studio. All rights reserved.
- * @author: Firebear Studio <fbeardev@gmail.com>
+ * @author   : Firebear Studio <fbeardev@gmail.com>
  */
 
 namespace Firebear\ImportExport\Model\Source\Config;
 
-class Reader extends \Magento\Framework\Config\Reader\Filesystem {
+use Magento\Framework\Config\FileResolverInterface;
+use Magento\Framework\Config\Reader\Filesystem;
+use Magento\Framework\Config\ValidationStateInterface;
+
+/**
+ * Class Reader
+ */
+class Reader extends Filesystem
+{
     protected $_idAttributes = [
-        '/config/type' => 'name'
+        '/config/type' => 'name',
     ];
 
-
+    /**
+     * Reader constructor.
+     *
+     * @param FileResolverInterface    $fileResolver
+     * @param Converter                $converter
+     * @param SchemaLocator            $schemaLocator
+     * @param ValidationStateInterface $validationState
+     * @param string                   $fileName
+     * @param array                    $idAttributes
+     * @param string                   $domDocumentClass
+     * @param string                   $defaultScope
+     */
     public function __construct(
-        \Magento\Framework\Config\FileResolverInterface $fileResolver,
-        \Firebear\ImportExport\Model\Source\Config\Converter $converter,
-        \Firebear\ImportExport\Model\Source\Config\SchemaLocator $schemaLocator,
-        \Magento\Framework\Config\ValidationStateInterface $validationState,
+        FileResolverInterface $fileResolver,
+        Converter $converter,
+        SchemaLocator $schemaLocator,
+        ValidationStateInterface $validationState,
         $fileName = 'source_types.xml',
         $idAttributes = [],
         $domDocumentClass = 'Magento\Framework\Config\Dom',

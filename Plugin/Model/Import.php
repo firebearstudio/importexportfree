@@ -1,32 +1,48 @@
 <?php
 /**
  * @copyright: Copyright © 2015 Firebear Studio. All rights reserved.
- * @author: Firebear Studio <fbeardev@gmail.com>
+ * @author   : Firebear Studio <fbeardev@gmail.com>
  */
 
 namespace Firebear\ImportExport\Plugin\Model;
 
+use Firebear\ImportExport\Helper\Data;
+use Firebear\ImportExport\Model\Source\ConfigInterface;
+use Firebear\ImportExport\Model\Source\Type\AbstractType;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\HTTP\Adapter\FileTransferFactory;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\ImportExport\Model\Export\Adapter\CsvFactory;
+use Magento\ImportExport\Model\History;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
+use Magento\ImportExport\Model\Import\Entity\Factory;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Indexer\Model\IndexerRegistry;
+use Magento\MediaStorage\Model\File\UploaderFactory;
+use Psr\Log\LoggerInterface;
 
-class Import extends \Magento\ImportExport\Model\Import {
-
+/**
+ * Class Import
+ */
+class Import extends \Magento\ImportExport\Model\Import
+{
     /**
      * Limit displayed errors on Import History page.
      */
     const LIMIT_VISIBLE_ERRORS = 5;
-
     const CREATE_ATTRIBUTES_CONF_PATH = 'firebear_importexport/general/create_attributes';
 
     /**
-     * @var \Firebear\ImportExport\Model\Source\ConfigInterface
+     * @var ConfigInterface
      */
     protected $_config;
 
     /**
-     * @var \Firebear\ImportExport\Helper\Data
+     * @var Data
      */
     protected $_helper;
 
@@ -36,7 +52,7 @@ class Import extends \Magento\ImportExport\Model\Import {
     protected $_timezone;
 
     /**
-     * @var \Firebear\ImportExport\Model\Source\Type\AbstractType
+     * @var AbstractType
      */
     protected $_source;
 
@@ -46,43 +62,43 @@ class Import extends \Magento\ImportExport\Model\Import {
     protected $directory;
 
     /**
-     * @param \Firebear\ImportExport\Model\Source\ConfigInterface        $config
-     * @param \Firebear\ImportExport\Helper\Data                         $helper
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface       $timezone
-     * @param \Psr\Log\LoggerInterface                                   $logger
-     * @param \Magento\Framework\Filesystem                              $filesystem
+     * @param ConfigInterface                                            $config
+     * @param Data                                                       $helper
+     * @param TimezoneInterface                                          $timezone
+     * @param LoggerInterface                                            $logger
+     * @param Filesystem                                                 $filesystem
      * @param \Magento\ImportExport\Helper\Data                          $importExportData
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface         $coreConfig
+     * @param ScopeConfigInterface                                       $coreConfig
      * @param \Magento\ImportExport\Model\Import\ConfigInterface         $importConfig
-     * @param \Magento\ImportExport\Model\Import\Entity\Factory          $entityFactory
+     * @param Factory                                                    $entityFactory
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data      $importData
-     * @param \Magento\ImportExport\Model\Export\Adapter\CsvFactory      $csvFactory
-     * @param \Magento\Framework\HTTP\Adapter\FileTransferFactory        $httpFactory
-     * @param \Magento\MediaStorage\Model\File\UploaderFactory           $uploaderFactory
+     * @param CsvFactory                                                 $csvFactory
+     * @param FileTransferFactory                                        $httpFactory
+     * @param UploaderFactory                                            $uploaderFactory
      * @param \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
-     * @param \Magento\ImportExport\Model\History $importHistoryModel
+     * @param IndexerRegistry                                            $indexerRegistry
+     * @param History                                                    $importHistoryModel
      * @param \Magento\Framework\Stdlib\DateTime\DateTime
-     * @param array $data
+     * @param array                                                      $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Firebear\ImportExport\Model\Source\ConfigInterface $config,
-        \Firebear\ImportExport\Helper\Data $helper,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Filesystem $filesystem,
+        ConfigInterface $config,
+        Data $helper,
+        TimezoneInterface $timezone,
+        LoggerInterface $logger,
+        Filesystem $filesystem,
         \Magento\ImportExport\Helper\Data $importExportData,
-        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
+        ScopeConfigInterface $coreConfig,
         \Magento\ImportExport\Model\Import\ConfigInterface $importConfig,
-        \Magento\ImportExport\Model\Import\Entity\Factory $entityFactory,
+        Factory $entityFactory,
         \Magento\ImportExport\Model\ResourceModel\Import\Data $importData,
-        \Magento\ImportExport\Model\Export\Adapter\CsvFactory $csvFactory,
-        \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory,
-        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
+        CsvFactory $csvFactory,
+        FileTransferFactory $httpFactory,
+        UploaderFactory $uploaderFactory,
         \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
-        \Magento\ImportExport\Model\History $importHistoryModel,
+        History $importHistoryModel,
         \Magento\Framework\Stdlib\DateTime\DateTime $localeDate,
         array $data = []
     ) {
@@ -90,7 +106,6 @@ class Import extends \Magento\ImportExport\Model\Import {
         $this->_helper = $helper;
         $this->_timezone = $timezone;
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-
         parent::__construct(
             $logger,
             $filesystem,
@@ -114,6 +129,7 @@ class Import extends \Magento\ImportExport\Model\Import {
      * Prepare source type class name
      *
      * @param $sourceType
+     *
      * @return string
      */
     protected function _prepareSourceClassName($sourceType)
@@ -123,26 +139,24 @@ class Import extends \Magento\ImportExport\Model\Import {
 
     /**
      * @return mixed|null|string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function uploadSource()
     {
         $result = null;
-
-        if ($this->getImportSource() && $this->getImportSource() != 'file') {
+        if($this->getImportSource() && $this->getImportSource() != 'file') {
             $source = $this->getSource();
-
             try {
                 $result = $source->uploadSource();
             } catch(\Exception $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
+                throw new LocalizedException(__($e->getMessage()));
             }
         }
-
-        if ($result) {
+        if($result) {
             $sourceFileRelative = $this->directory->getRelativePath($result);
             $entity = $this->getEntity();
             $this->createHistoryReport($sourceFileRelative, $entity);
+
             return DirectoryList::VAR_DIR . '/' . $result;
         }
 
@@ -153,6 +167,7 @@ class Import extends \Magento\ImportExport\Model\Import {
      * Validates source file and returns validation result.
      *
      * @param AbstractSource $source
+     *
      * @return bool
      */
     public function validateSource(AbstractSource $source)
@@ -161,11 +176,11 @@ class Import extends \Magento\ImportExport\Model\Import {
         try {
             $adapter = $this->_getEntityAdapter()->setSource($source);
             $errorAggregator = $adapter->validateData();
-        } catch (\Exception $e) {
+        } catch(\Exception $e) {
             $errorAggregator = $this->getErrorAggregator();
             $errorAggregator->addError(
                 AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION
-                    . '. ' . $e->getMessage(),
+                . '. ' . $e->getMessage(),
                 ProcessingError::ERROR_LEVEL_CRITICAL,
                 null,
                 null,
@@ -173,25 +188,22 @@ class Import extends \Magento\ImportExport\Model\Import {
                 $e->getMessage()
             );
         }
-
         $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
-
         $result = !$errorAggregator->getErrorsCount();
-        if ($result) {
+        if($result) {
             $this->addLogComment(__('Import data validation is complete.'));
         } else {
-            if ($this->isReportEntityType()) {
+            if($this->isReportEntityType()) {
                 $this->importHistoryModel->load($this->importHistoryModel->getLastItemId());
                 $summary = '';
-                if ($errorAggregator->getErrorsCount() > self::LIMIT_VISIBLE_ERRORS) {
+                if($errorAggregator->getErrorsCount() > self::LIMIT_VISIBLE_ERRORS) {
                     $summary = __('Too many errors. Please check your debug log file.') . '<br />';
                 } else {
-                    if ($this->getJobId()) {
+                    if($this->getJobId()) {
                         $summary = __('Import job #' . $this->getJobId() . ' failed.') . '<br />';
                     }
-
-                    foreach ($errorAggregator->getRowsGroupedByErrorCode() as $errorMessage => $rows) {
+                    foreach($errorAggregator->getRowsGroupedByErrorCode() as $errorMessage => $rows) {
                         $error = $errorMessage . ' ' . __('in rows') . ': ' . implode(', ', $rows);
                         $summary .= $error . '<br />';
                     }
@@ -205,27 +217,27 @@ class Import extends \Magento\ImportExport\Model\Import {
                 );
                 $summary .= '<i>' . $date . '</i>';
                 $this->importHistoryModel->setSummary($summary);
-                $this->importHistoryModel->setExecutionTime(\Magento\ImportExport\Model\History::IMPORT_FAILED);
+                $this->importHistoryModel->setExecutionTime(History::IMPORT_FAILED);
                 $this->importHistoryModel->save();
             }
         }
+
         return $result;
     }
 
     /**
      * Get import source by type.
      *
-     * @return \Firebear\ImportExport\Model\Source\Type\AbstractType
+     * @return AbstractType
      */
     public function getSource()
     {
-        if (!$this->_source) {
+        if(!$this->_source) {
             $sourceType = $this->getImportSource();
             try {
                 $this->_source = $this->_helper->getSourceModelByType($sourceType);
                 $this->_source->setData($this->getData());
             } catch(\Exception $e) {
-
             }
         }
 
