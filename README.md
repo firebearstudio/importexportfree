@@ -35,6 +35,8 @@ For further information, read this post: <a href="https://firebearstudio.com/blo
 
 <a href="https://firebearstudio.com/blog/improved-import-magento-2-extension-manual.html"><b>Improved Import Extension manual and integration guide</b></a>
 
+<p><strong>Looking for some specific import feature , modification or connection to Magento 2? - <a href="https://firebearstudio.com/contacts" target="_blank">Contact us</a> to discuss and get specific complex import solutions!&nbsp;</strong></p>
+
 <h3 style="text-align: justify;">Improved Import for Magento 2 upcoming features roadmap</h3>
 Since we are continuously working on Improved Import features following community and merchant needs, here are upcoming features which we are working on now.
 
