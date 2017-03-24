@@ -4,36 +4,40 @@
  * See COPYING.txt for license details.
  */
 
+namespace Firebear\ImportExport\Model\Source;
+
+use Magento\Framework\ObjectManagerInterface;
+use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
+
 /**
  * Import source factory
  */
-namespace Firebear\ImportExport\Model\Source;
-
 class Factory
 {
     /**
      * Object Manager
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
 
     /**
      * @param string $className
-     * @return \Magento\ImportExport\Model\Source\Import\AbstractBehavior
+     *
+     * @return AbstractBehavior
      * @throws \InvalidArgumentException
      */
     public function create($className)
     {
-        if (!$className) {
+        if(!$className) {
             throw new \InvalidArgumentException('Incorrect class name');
         }
 

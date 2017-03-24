@@ -1,24 +1,28 @@
 <?php
 /**
  * @copyright: Copyright © 2015 Firebear Studio. All rights reserved.
- * @author: Firebear Studio <fbeardev@gmail.com>
+ * @author   : Firebear Studio <fbeardev@gmail.com>
  */
 
 namespace Firebear\ImportExport\Model\Source\Type;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\DataObject;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\File\ReadFactory;
 
 /**
  * Abstract class for import source types
  * @package Firebear\ImportExport\Model\Source\Type
  */
-abstract class AbstractType extends \Magento\Framework\DataObject {
-
+abstract class AbstractType extends DataObject
+{
     /**
      * Temp directory for downloaded files
      */
     const IMPORT_DIR = 'import';
-
     /**
      * Temp directory for downloaded images
      */
@@ -31,22 +35,22 @@ abstract class AbstractType extends \Magento\Framework\DataObject {
     protected $_code;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var WriteInterface
      */
     protected $_directory;
 
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     protected $_filesystem;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\ReadFactory
+     * @var ReadFactory
      */
     protected $_readFactory;
 
@@ -58,14 +62,14 @@ abstract class AbstractType extends \Magento\Framework\DataObject {
     protected $_client;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Filesystem                      $filesystem
-     * @param \Magento\Framework\Filesystem\File\ReadFactory     $readFactory
+     * @param ScopeConfigInterface $scopeConfig
+     * @param Filesystem           $filesystem
+     * @param ReadFactory          $readFactory
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Filesystem\File\ReadFactory $readFactory
+        ScopeConfigInterface $scopeConfig,
+        Filesystem $filesystem,
+        ReadFactory $readFactory
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_filesystem = $filesystem;
@@ -106,9 +110,11 @@ abstract class AbstractType extends \Magento\Framework\DataObject {
      *
      * @return bool|string
      */
-    public function getImportFilePath() {
-        if ($sourceType = $this->getImportSource()) {
+    public function getImportFilePath()
+    {
+        if($sourceType = $this->getImportSource()) {
             $filePath = $this->getData($sourceType . '_file_path');
+
             return $filePath;
         }
 

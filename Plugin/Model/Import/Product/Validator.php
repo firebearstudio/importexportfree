@@ -3,33 +3,37 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Firebear\ImportExport\Plugin\Model\Import\Product;
 
-use \Magento\CatalogImportExport\Model\Import\Product;
-use \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
-use \Magento\Framework\Validator\AbstractValidator;
+use Firebear\ImportExport\Plugin\Model\Import;
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
+use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\Validator\AbstractValidator;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class Validator
  * Rewrite this class to allow import attribute values on the fly.
- *
- * @package Firebear\ImportExport\Plugin\Model\Import\Product
  */
-class Validator extends \Magento\CatalogImportExport\Model\Import\Product\Validator
+class Validator extends Product\Validator
 {
     protected $scopeConfig;
 
     protected $prodAttrFac;
 
     /**
-     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param StringUtils             $string
      * @param RowValidatorInterface[] $validators
      */
     public function __construct(
-        \Magento\Framework\Stdlib\StringUtils $string,
+        StringUtils $string,
         $validators = [],
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $prodAttrFac
+        ScopeConfigInterface $scopeConfig,
+        AttributeFactory $prodAttrFac
     ) {
         parent::__construct($string, $validators);
         $this->scopeConfig = $scopeConfig;
@@ -40,8 +44,9 @@ class Validator extends \Magento\CatalogImportExport\Model\Import\Product\Valida
      * Rewrite method which allow create attributes & values on the fly
      *
      * @param string $attrCode
-     * @param array $attrParams
-     * @param array $rowData
+     * @param array  $attrParams
+     * @param array  $rowData
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -49,13 +54,12 @@ class Validator extends \Magento\CatalogImportExport\Model\Import\Product\Valida
     public function isAttributeValid($attrCode, array $attrParams, array $rowData)
     {
         $this->_rowData = $rowData;
-        if (isset($rowData['product_type']) && !empty($attrParams['apply_to'])
-            && !in_array($rowData['product_type'], $attrParams['apply_to'])
+        if(isset($rowData['product_type']) && !empty($attrParams['apply_to'])
+           && !in_array($rowData['product_type'], $attrParams['apply_to'])
         ) {
             return true;
         }
-
-        if (!$this->isRequiredAttributeValid($attrCode, $attrParams, $rowData)) {
+        if(!$this->isRequiredAttributeValid($attrCode, $attrParams, $rowData)) {
             $valid = false;
             $this->_addMessages(
                 [
@@ -64,16 +68,16 @@ class Validator extends \Magento\CatalogImportExport\Model\Import\Product\Valida
                             RowValidatorInterface::ERROR_VALUE_IS_REQUIRED
                         ),
                         $attrCode
-                    )
+                    ),
                 ]
             );
+
             return $valid;
         }
-
-        if (!strlen(trim($rowData[$attrCode]))) {
+        if(!strlen(trim($rowData[$attrCode]))) {
             return true;
         }
-        switch ($attrParams['type']) {
+        switch($attrParams['type']) {
             case 'varchar':
             case 'text':
                 $valid = $this->textValidation($attrCode, $attrParams['type']);
@@ -86,21 +90,21 @@ class Validator extends \Magento\CatalogImportExport\Model\Import\Product\Valida
             case 'boolean':
             case 'multiselect':
                 $createValuesAllowed = (bool) $this->scopeConfig->getValue(
-                    \Firebear\ImportExport\Plugin\Model\Import::CREATE_ATTRIBUTES_CONF_PATH,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    Import::CREATE_ATTRIBUTES_CONF_PATH,
+                    ScopeInterface::SCOPE_STORE
                 );
                 $attribute = $this->prodAttrFac->create();
                 $attribute->load($attrParams['id']);
                 $values = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData[$attrCode]);
                 $valid = true;
-                foreach ($values as $value) {
-                    if ($createValuesAllowed && $attribute->getIsUserDefined()) {
+                foreach($values as $value) {
+                    if($createValuesAllowed && $attribute->getIsUserDefined()) {
                         $valid = $valid && ($this->string->strlen($value) < Product::DB_MAX_VARCHAR_LENGTH);
                     } else {
                         $valid = $valid && isset($attrParams['options'][strtolower($value)]);
                     }
                 }
-                if (!$valid) {
+                if(!$valid) {
                     $this->_addMessages(
                         [
                             sprintf(
@@ -108,7 +112,7 @@ class Validator extends \Magento\CatalogImportExport\Model\Import\Product\Valida
                                     RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_OPTION
                                 ),
                                 $attrCode
-                            )
+                            ),
                         ]
                     );
                 }
@@ -116,7 +120,7 @@ class Validator extends \Magento\CatalogImportExport\Model\Import\Product\Valida
             case 'datetime':
                 $val = trim($rowData[$attrCode]);
                 $valid = strtotime($val) !== false;
-                if (!$valid) {
+                if(!$valid) {
                     $this->_addMessages([RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE]);
                 }
                 break;
@@ -124,16 +128,17 @@ class Validator extends \Magento\CatalogImportExport\Model\Import\Product\Valida
                 $valid = true;
                 break;
         }
-
-        if ($valid && !empty($attrParams['is_unique'])) {
-            if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]])
-                && ($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[Product::COL_SKU])) {
+        if($valid && !empty($attrParams['is_unique'])) {
+            if(isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]])
+               && ($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[Product::COL_SKU])
+            ) {
                 $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_UNIQUE_ATTRIBUTE]);
+
                 return false;
             }
             $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = $rowData[Product::COL_SKU];
         }
-        return (bool)$valid;
 
+        return (bool) $valid;
     }
 }
