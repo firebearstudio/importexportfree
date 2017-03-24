@@ -50,6 +50,8 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>Integration with API of data crawling services, such as https://www.import.io/. Crawl product data from any source and import it directly to Magento 2 - this oppens nearly endless possibilities!</li>
 	<li>MS Excel XLSX files native import and mapping - processing of complex Excel files with multiple pages, flexible file files mapping to Magento 2 products , customers and orders striucture </li>
 	<li>Full covarage by unit and integrations tests </li>
+	<li>Extension is submitted and will be available soon on Magento Marketplace</li>
+	<li>API for Magento 2 Import and Improved Import functionality</li>
 </ul>
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/files/m2import/magento2-dropbox-box-drive-ftp-products-images-import.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" /></a>
