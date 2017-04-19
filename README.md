@@ -54,6 +54,7 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>Full covarage by unit and integrations tests </li>
 	<li>Extension is submitted and will be available soon on Magento Marketplace</li>
 	<li>API for Magento 2 Import and Improved Import functionality</li>
+	<li>Full XML format support for import with same features and entites as for CSV</li>
 </ul>
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/files/m2import/magento2-dropbox-box-drive-ftp-products-images-import.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" /></a>
