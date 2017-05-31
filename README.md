@@ -4,36 +4,26 @@ We’ve started a new project aimed at improving the default Magento 2 import / 
 
 The Improved Import / Export Magento 2 extension provides the ability to import a CSV file with product data and product images from a remote FTP server or a cloud storage such as Dropbox, Box, or Google Drive. There is also an opportunity to perform the export of products and images to the same location. Due to a scheduled cron job feature, the extension offers automated product updates from a cloud storage. Thus, you can easily connect your Magento 2 store with 3th party tools, warehouses, product inventory management (PIM) systems, etc. As you can see, Improved Import / Export for Magento 2 is useful for automated product stock status updates as well as any other product attribute updates.
 
-<h2>Installation</h2>
-<ol>
-<li>Copy files to /app/code/Firebear/ImportExport/ folder (create it if not exist!)</li>
-<li>
-Run:<br />
-``` 
+## Installation
+1. Copy files to /app/code/Firebear/ImportExport/ folder (create it if not exist!)
+2. Run:
+```
 php -f bin/magento module:enable Firebear_ImportExport
 ```
-</li>
-<li>
-If you want to use Dropbox features :<br />
+3. If you want to use Dropbox features :
 ``` 
 composer require kunalvarma05/dropbox-php-sdk
 ```
-</li>
-<li>
-Run:<br />
+4. Run:
 ``` 
 php -f bin/magento setup:upgrade
 ```
-<br />
 ```
 php -f bin/magento setup:static-content:deploy
 ```
-<br />
 ```
 php -f bin/magento cache:clean
 ```
-</li>
-</ol>
 
 <h2>Improved Import features</h2> 
 
