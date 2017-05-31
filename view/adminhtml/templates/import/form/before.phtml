@@ -31,9 +31,39 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'prototype'], function(jQuery){
         jQuery('.source-fieldset').find('._required').removeClass('required-entry').prop('disabled', true);
         if (entity && entity.val()) {
             jQuery('#upload_' + entity.val() + '_fieldset').show();
-            jQuery('#upload_' + entity.val() + '_fieldset').find('._required').addClass('required-entry').prop('disabled', false);
+            jQuery('#upload_' + entity.val() + '_fieldset')
+                .find('._required')
+                .addClass('required-entry')
+                .prop('disabled', false);
         }
     };
+
+    /**
+     * Post form data to dynamic iframe.
+     * @param {string} newActionUrl OPTIONAL Change form action to this if specified
+     */
+    varienImport.postToFrame = function(newActionUrl) {
+        if (!jQuery('[name="' + this.ifrElemName + '"]').length) {
+            jQuery('body').append('<iframe name="' + this.ifrElemName + '" id="' + this.ifrElemName
+                + '" style="display:none;"/>');
+        }
+        jQuery('body')
+            .loader({
+                icon: jQuery('#loading_mask_loader img').attr('src')
+            })
+            .loader('show');
+        var form = jQuery('#edit_form')
+            .one('invalid-form.validate', function(e){jQuery('body').loader('hide')});
+        var formAction = newActionUrl ? newActionUrl : form.attr('action');
+        newActionUrl = formAction +
+            (formAction.lastIndexOf('?') !== -1 ? '&' : '?')+
+            'form_key=' + encodeURIComponent(form.find('[name="form_key"]').val());
+
+        form.trigger('save', [{
+            action: newActionUrl,
+            target: this.ifrElemName
+        }]);
+    },
 
     /**
      * Show upload source dropdown

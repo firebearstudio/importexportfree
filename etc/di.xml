@@ -5,13 +5,16 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Firebear\ImportExport\Model\Source\ConfigInterface" type="Firebear\ImportExport\Model\Source\Config" />
-    <preference for="Magento\ImportExport\Model\Import" type="Firebear\ImportExport\Plugin\Model\Import" />
-    <preference for="Magento\CatalogImportExport\Model\Import\Product" type="Firebear\ImportExport\Plugin\Model\Import\Product" />
-    <preference for="Magento\CatalogImportExport\Model\Import\Product\Validator" type="Firebear\ImportExport\Plugin\Model\Import\Product\Validator" />
-    <preference for="Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable" type="Firebear\ImportExport\Model\Import\Product\Type\Downloadable" />
+    <preference for="Firebear\ImportExport\Model\Source\ConfigInterface"
+                type="Firebear\ImportExport\Model\Source\Config" />
 
-    <type name="Magento\ImportExport\Model\Import">
-        <plugin name="firebear_importexport_source" type="Firebear\ImportExport\Plugin\Model\Import" />
+    <type name="Magento\ImportExport\Controller\Adminhtml\Import\Validate">
+        <plugin name="firebear_importexport_controller_import_validate" type="Firebear\ImportExport\Plugin\Controller\Adminhtml\Import\Validate" />
+    </type>
+    <type name="Magento\CatalogImportExport\Model\Import\Product\Validator">
+        <plugin name="firebear_importexport_import_product_validator" type="Firebear\ImportExport\Plugin\Model\Import\Product\Validator" />
+    </type>
+    <type name="Magento\ImportExport\Model\Import\Config\Converter">
+        <plugin name="firebear_importexport_config_converter" type="Firebear\ImportExport\Plugin\Model\Import\Config\Converter" />
     </type>
 </config>

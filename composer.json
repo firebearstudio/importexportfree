@@ -1,22 +1,21 @@
 {
-    "name": "firebear/importexportfree",
-    "description": "Improve default Magento 2 Import / Export features https://firebearstudio.com/blog/",
-    "require": {
-        "php": "~5.5.0|~5.6.0|~7.0.0",
-        "magento/module-import-export": "100.*",
-        "dropbox/dropbox-sdk": "1.1.*"
-    },
-    "type": "magento2-module",
-    "version": "1.0.3",
-    "license": [
-        "GPL-3.0"
+  "name": "firebear/importexportfree",
+  "description": "Improve default Magento 2 Import / Export features https://firebearstudio.com/blog/",
+  "require": {
+    "php": "~5.5.0|~5.6.0|~7.0.0",
+    "kunalvarma05/dropbox-php-sdk": "0.2.*"
+  },
+  "type": "magento2-module",
+  "version": "1.0.4",
+  "license": [
+    "OSL-3.0"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
     ],
-    "autoload": {
-        "files": [
-            "registration.php"
-        ],
-        "psr-4": {
-            "Firebear\\ImportExport\\": ""
-        }
+    "psr-4": {
+      "Firebear\\ImportExport\\": ""
     }
+  }
 }

@@ -1,72 +1,88 @@
 <?php
 /**
  * @copyright: Copyright © 2015 Firebear Studio. All rights reserved.
- * @author   : Firebear Studio <fbeardev@gmail.com>
+ * @author: Firebear Studio <fbeardev@gmail.com>
  */
-
 namespace Firebear\ImportExport\Model\Source\Type;
 
-use Dropbox\Client;
-use Dropbox\Exception_BadResponseCode;
-use Dropbox\Exception_OverQuota;
-use Dropbox\Exception_RetryLater;
-use Dropbox\Exception_ServerError;
-use Magento\Store\Model\ScopeInterface;
-
-/**
- * Class Dropbox
- */
 class Dropbox extends AbstractType
 {
     /**
+     * Source code
+     *
      * @var string
      */
-    protected $_code = 'dropbox';
+    protected $code = 'dropbox';
 
     /**
-     * @var null
+     * Dropbox app key
+     *
+     * @var string
      */
-    protected $_accessToken = null;
+    protected $appKey;
+
+    /**
+     * Dropbox app secret
+     *
+     * @var string
+     */
+    protected $appSecret;
+
+    /**
+     * @var string
+     */
+    protected $accessToken;
 
     /**
      * Download remote source file to temporary directory
      *
      * @return string
-     * @throws Exception_BadResponseCode
-     * @throws Exception_OverQuota
-     * @throws Exception_RetryLater
-     * @throws Exception_ServerError
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function uploadSource()
     {
-        if($client = $this->_getSourceClient()) {
-            $sourceFilePath = $this->getData($this->_code . '_file_path');
+        if ($client = $this->getSourceClient()) {
+            //$filePath = '/var/www/local-magento2.com/magento2/var/import/dropbox/test-dropbox.csv';
+            $sourceFilePath = $this->getData($this->code . '_file_path');
             $fileName = basename($sourceFilePath);
-            $filePath = $this->_directory->getAbsolutePath($this->getImportVarPath() . '/' . $fileName);
+            $filePath = $this->_directory->getAbsolutePath($this->getImportPath() . '/' . $fileName);
+
             try {
                 $dirname = dirname($filePath);
-                if(!is_dir($dirname)) {
+                if (!is_dir($dirname)) {
                     mkdir($dirname, 0775, true);
                 }
-                $file = fopen($filePath, 'w+b');
-            } catch(\Exception $e) {
-                throw new  \Magento\Framework\Exception\LocalizedException(
-                    __(
-                        "Can't create local file /var/import/dropbox'. Please check files permissions. "
-                        . $e->getMessage()
-                    )
-                );
+                $fileResource = fopen($filePath, 'w+b');
+            } catch (\Exception $e) {
+                throw new  \Magento\Framework\Exception\LocalizedException(__(
+                    "Can't create local file /var/import/dropbox'. Please check files permissions. "
+                    . $e->getMessage()
+                ));
             }
-            $fileMetadata = $client->getFile($sourceFilePath, $file);
-            fclose($file);
-            if($fileMetadata) {
-                return $this->_directory->getRelativePath($this->getImportPath() . '/' . $fileName);
+
+            try {
+                $fileMetadata = $client->download($sourceFilePath, $filePath);
+            } catch (\Kunnu\Dropbox\Exceptions\DropboxClientException $e) {
+                if ($e->getCode() == 0) {
+                    $response = $this->jsonHelper->jsonDecode($e->getMessage());
+                    throw new \Magento\Framework\Exception\LocalizedException(__(
+                        "Dropbox API Exception: " . $response['error_summary']
+                    ));
+                } else {
+                    throw new \Magento\Framework\Exception\LocalizedException(__(
+                        "Dropbox API Exception: " . $e->getMessage()
+                    ));
+                }
+            }
+
+            fclose($fileResource);
+            if ($fileMetadata) {
+                return $this->_directory->getAbsolutePath($this->getImportPath() . '/' . $fileName);
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(__("File not found on Dropbox"));
             }
         } else {
-            throw new  \Magento\Framework\Exception\LocalizedException(__("Can't initialize %s client", $this->_code));
+            throw new  \Magento\Framework\Exception\LocalizedException(__("Can't initialize %s client", $this->code));
         }
     }
 
@@ -76,28 +92,64 @@ class Dropbox extends AbstractType
      * @param $importImage
      * @param $imageSting
      *
-     * @return mixed|void
-     * @throws Exception_BadResponseCode
-     * @throws Exception_OverQuota
-     * @throws Exception_RetryLater
-     * @throws Exception_ServerError
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function importImage($importImage, $imageSting)
     {
-        if($client = $this->_getSourceClient()) {
+        if ($client = $this->getSourceClient()) {
             $filePath = $this->_directory->getAbsolutePath($this->getMediaImportPath() . $imageSting);
-            $sourceFilePath = $this->getData($this->_code . '_file_path');
+            $sourceFilePath = $this->getData($this->code . '_file_path');
             $sourceDir = dirname($sourceFilePath);
             $dirname = dirname($filePath);
-            if(!is_dir($dirname)) {
+            if (!is_dir($dirname)) {
                 mkdir($dirname, 0775, true);
             }
-            $file = fopen($filePath, 'w+b');
-            if($filePath) {
-                $client->getFile($sourceDir . '/' . $importImage, $file);
+            $fileResource = fopen($filePath, 'w+b');
+
+            if ($filePath) {
+                try {
+                    $client->download($sourceDir . '/' . $importImage, $filePath);
+                } catch (\Kunnu\Dropbox\Exceptions\DropboxClientException $e) {
+                    if ($e->getCode() == 0) {
+                        $response = $this->jsonHelper->jsonDecode($e->getMessage());
+                        throw new \Magento\Framework\Exception\LocalizedException(__(
+                            "Dropbox API Exception: " . $response['error_summary']
+                        ));
+                    } else {
+                        throw new \Magento\Framework\Exception\LocalizedException(__(
+                            "Dropbox API Exception: " . $e->getMessage()
+                        ));
+                    }
+                }
             }
-            fclose($file);
+            fclose($fileResource);
         }
+
+        return $this;
+    }
+
+    /**
+     * Check if remote file was modified since the last import
+     *
+     * @param int $timestamp
+     * @return bool|int
+     */
+    public function checkModified($timestamp)
+    {
+        if ($client = $this->getSourceClient()) {
+            $sourceFilePath = $this->getData($this->code . '_file_path');
+
+            if (!$this->_metadata) {
+                $this->_metadata = $client->getMetadata($sourceFilePath);
+            }
+
+            $modified = strtotime($this->_metadata['modified']);
+
+            return ($timestamp != $modified) ? $modified : false;
+        }
+
+        return false;
     }
 
     /**
@@ -107,54 +159,67 @@ class Dropbox extends AbstractType
      */
     public function getAccessToken()
     {
-        if(!$this->_accessToken) {
-            /**
-             * Data sent by cron job
-             * @see \Firebear\ImportExport\Plugin\Model\Import::uploadSource()
-             *
-             * else get token from admin config if import processed directly via admin panel
-             */
-            if($token = $this->getData('access_token')) {
-                $this->_accessToken = $token;
-            } else {
-                $this->_accessToken = $this->_scopeConfig->getValue(
-                    'firebear_importexport/dropbox/token',
-                    ScopeInterface::SCOPE_STORE
-                );
-            }
+        if (!$this->accessToken) {
+            $this->accessToken = $this->_scopeConfig->getValue(
+                'firebear_importexport/dropbox/token',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         }
 
-        return $this->_accessToken;
+        return $this->accessToken;
     }
 
     /**
-     * Set access token
+     * Get dropbox application key
      *
-     * @param $token
-     *
-     * @return Dropbox
+     * @return string|null
      */
-    public function setAccessToken($token)
+    public function getAppKey()
     {
-        $this->_accessToken = $token;
+        if (!$this->appKey) {
+            $this->appKey = $this->_scopeConfig->getValue(
+                'firebear_importexport/dropbox/app_key',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+        }
 
-        return $this;
+        return $this->appKey;
+    }
+
+    /**
+     * Get dropbox application secret
+     *
+     * @return string|null
+     */
+    public function getAppSecret()
+    {
+        if (!$this->appSecret) {
+            $this->appSecret = $this->_scopeConfig->getValue(
+                'firebear_importexport/dropbox/app_secret',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+        }
+
+        return $this->appSecret;
     }
 
     /**
      * Prepare and return API client
      *
-     * @return Client
+     * @return \Kunnu\Dropbox\Dropbox
      */
-    protected function _getSourceClient()
+    protected function getSourceClient()
     {
-        if(!$this->_client) {
+        if (!$this->client) {
+            $appKey = $this->getAppKey();
+            $appSecret = $this->getAppSecret();
             $accessToken = $this->getAccessToken();
-            if($accessToken) {
-                $this->_client = new Client($accessToken, "PHP-Example/1.0");
+            if ($accessToken) {
+                $app = new \Kunnu\Dropbox\DropboxApp($appKey, $appSecret, $accessToken);
+                $this->client = new \Kunnu\Dropbox\Dropbox($app);
             }
         }
 
-        return $this->_client;
+        return $this->client;
     }
 }

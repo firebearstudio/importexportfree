@@ -1,48 +1,44 @@
 <?php
 /**
  * @copyright: Copyright © 2015 Firebear Studio. All rights reserved.
- * @author   : Firebear Studio <fbeardev@gmail.com>
+ * @author: Firebear Studio <fbeardev@gmail.com>
  */
 
 namespace Firebear\ImportExport\Model\Source\Type;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem\Io\File;
-use Magento\Store\Model\ScopeInterface;
-
-/**
- * Class Ftp
- */
 class Ftp extends AbstractType
 {
     /**
      * @var string
      */
-    protected $_code = 'ftp';
+    protected $code = 'ftp';
 
     /**
      * Download remote source file to temporary directory
      *
      * @return string
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function uploadSource()
     {
-        if($client = $this->_getSourceClient()) {
-            $sourceFilePath = $this->getData($this->_code . '_file_path');
+        if ($client = $this->getSourceClient()) {
+            $sourceFilePath = $this->getData($this->code . '_file_path');
             $fileName = basename($sourceFilePath);
-            $filePath = $this->_directory->getAbsolutePath($this->getImportVarPath() . '/' . $fileName);
-            $filesystem = new File();
+            //return get_class($this->_directory);
+            $filePath = $this->_directory->getAbsolutePath($this->getImportPath() . '/' . $fileName);
+            $filesystem = new \Magento\Framework\Filesystem\Io\File();
             $filesystem->setAllowCreateFolders(true);
-            $filesystem->checkAndCreateFolder($this->_directory->getAbsolutePath($this->getImportVarPath()));
+            $filesystem->checkAndCreateFolder($this->_directory->getAbsolutePath($this->getImportPath()));
+
             $result = $client->read($sourceFilePath, $filePath);
-            if($result) {
+
+            if ($result) {
                 return $this->_directory->getAbsolutePath($this->getImportPath() . '/' . $fileName);
             } else {
-                throw new LocalizedException(__("File not found"));
+                throw new \Magento\Framework\Exception\LocalizedException(__("File not found"));
             }
         } else {
-            throw new  LocalizedException(__("Can't initialize %s client", $this->_code));
+            throw new  \Magento\Framework\Exception\LocalizedException(__("Can't initialize %s client", $this->code));
         }
     }
 
@@ -52,50 +48,74 @@ class Ftp extends AbstractType
      * @param $importImage
      * @param $imageSting
      *
-     * @return mixed|void
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function importImage($importImage, $imageSting)
     {
-        if($client = $this->_getSourceClient()) {
-            $sourceFilePath = $this->getData($this->_code . '_file_path');
+        if ($client = $this->getSourceClient()) {
+            $sourceFilePath = $this->getData($this->code . '_file_path');
             $sourceDirName = dirname($sourceFilePath);
             $filePath = $this->_directory->getAbsolutePath($this->getMediaImportPath() . $imageSting);
             $dirname = dirname($filePath);
-            if(!is_dir($dirname)) {
+            if (!is_dir($dirname)) {
                 mkdir($dirname, 0775, true);
             }
-            if($filePath) {
+            if ($filePath) {
                 $result = $client->read($sourceDirName . '/' . $importImage, $filePath);
             }
         }
     }
 
-    protected function _getSourceClient()
+    /**
+     * Check if remote file was modified since the last import
+     *
+     * @param int $timestamp
+     * @return bool|int
+     */
+    public function checkModified($timestamp)
     {
-        if(!$this->getClient()) {
-            if(
-                $this->getData('host')
-                && $this->getData('port')
-                && $this->getData('user')
-                && $this->getData('password')
-            ) {
+        if ($client = $this->getSourceClient()) {
+            $sourceFilePath = $this->getData($this->code . '_file_path');
+
+            if (!$this->_metadata) {
+                $this->_metadata['modified'] = $client->mdtm($sourceFilePath);
+            }
+
+            $modified = $this->_metadata['modified'];
+
+            return ($timestamp != $this->_metadata['modified']) ? $modified : false;
+        }
+
+        return false;
+    }
+
+    /**
+     * Prepare and return FTP client
+     *
+     * @return \Firebear\ImportExport\Model\Filesystem\Io\Ftp
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function getSourceClient()
+    {
+        if (!$this->getClient()) {
+            if ($this->getData('host') && $this->getData('port') && $this->getData('user') && $this->getData('password')) {
                 $settings = $this->getData();
             } else {
                 $settings = $this->_scopeConfig->getValue(
                     'firebear_importexport/ftp',
-                    ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 );
             }
+
             $settings['passive'] = true;
             try {
                 $connection = new \Firebear\ImportExport\Model\Filesystem\Io\Ftp();
                 $connection->open(
                     $settings
                 );
-                $this->_client = $connection;
-            } catch(\Exception $e) {
-                throw new  LocalizedException(__($e->getMessage()));
+                $this->client = $connection;
+            } catch (\Exception $e) {
+                throw new  \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
             }
         }
 

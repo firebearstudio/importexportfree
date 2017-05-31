@@ -1,17 +1,13 @@
 <?php
 /**
  * @copyright: Copyright © 2015 Firebear Studio. All rights reserved.
- * @author   : Firebear Studio <fbeardev@gmail.com>
+ * @author: Firebear Studio <fbeardev@gmail.com>
  */
 
 namespace Firebear\ImportExport\Model\Source\Type;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObject;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\File\ReadFactory;
 
 /**
  * Abstract class for import source types
@@ -19,10 +15,12 @@ use Magento\Framework\Filesystem\File\ReadFactory;
  */
 abstract class AbstractType extends DataObject
 {
+
     /**
      * Temp directory for downloaded files
      */
-    const IMPORT_DIR = 'import';
+    const IMPORT_DIR = 'var/import';
+
     /**
      * Temp directory for downloaded images
      */
@@ -32,25 +30,30 @@ abstract class AbstractType extends DataObject
      * Source type code
      * @var string
      */
-    protected $_code;
+    protected $code;
 
     /**
-     * @var ScopeConfigInterface
+     * @var \Magento\Framework\Json\Helper\Data
+     */
+    protected $jsonHelper;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $_directory;
 
     /**
-     * @var Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
     /**
-     * @var ReadFactory
+     * @var \Magento\Framework\Filesystem\File\ReadFactory
      */
     protected $_readFactory;
 
@@ -59,22 +62,28 @@ abstract class AbstractType extends DataObject
      */
     protected $_metadata = [];
 
-    protected $_client;
+    /**
+     * @var mixed
+     */
+    protected $client;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param Filesystem           $filesystem
-     * @param ReadFactory          $readFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Filesystem                      $filesystem
+     * @param \Magento\Framework\Filesystem\File\ReadFactory     $readFactory
+     * @param \Magento\Framework\Json\Helper\Data                $jsonHelper
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        Filesystem $filesystem,
-        ReadFactory $readFactory
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Filesystem\File\ReadFactory $readFactory,
+        \Magento\Framework\Json\Helper\Data $jsonHelper
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_filesystem = $filesystem;
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->_readFactory = $readFactory;
+        $this->jsonHelper = $jsonHelper;
     }
 
     /**
@@ -84,15 +93,7 @@ abstract class AbstractType extends DataObject
      */
     protected function getImportPath()
     {
-        return self::IMPORT_DIR . '/' . $this->_code;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getImportVarPath()
-    {
-        return DirectoryList::VAR_DIR . '/' . $this->getImportPath();
+        return self::IMPORT_DIR . '/' . $this->code;
     }
 
     /**
@@ -102,7 +103,7 @@ abstract class AbstractType extends DataObject
      */
     protected function getMediaImportPath()
     {
-        return self::MEDIA_IMPORT_DIR . '/' . $this->_code;
+        return self::MEDIA_IMPORT_DIR . '/' . $this->code;
     }
 
     /**
@@ -112,9 +113,8 @@ abstract class AbstractType extends DataObject
      */
     public function getImportFilePath()
     {
-        if($sourceType = $this->getImportSource()) {
+        if ($sourceType = $this->getImportSource()) {
             $filePath = $this->getData($sourceType . '_file_path');
-
             return $filePath;
         }
 
@@ -128,40 +128,24 @@ abstract class AbstractType extends DataObject
      */
     public function getCode()
     {
-        return $this->_code;
+        return $this->code;
     }
 
-    /**
-     * @return mixed
-     */
     public function getClient()
     {
-        return $this->_client;
+        return $this->client;
     }
 
-    /**
-     * @param $client
-     */
     public function setClient($client)
     {
-        $this->_client = $client;
+        $this->client = $client;
     }
 
-    /**
-     * @return mixed
-     */
     abstract function uploadSource();
 
-    /**
-     * @param $importImage
-     * @param $imageSting
-     *
-     * @return mixed
-     */
     abstract function importImage($importImage, $imageSting);
 
-    /**
-     * @return mixed
-     */
-    abstract protected function _getSourceClient();
+    abstract function checkModified($timestamp);
+
+    abstract protected function getSourceClient();
 }

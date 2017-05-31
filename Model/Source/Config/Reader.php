@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright: Copyright © 2015 Firebear Studio. All rights reserved.
- * @author   : Firebear Studio <fbeardev@gmail.com>
+ * @author: Firebear Studio <fbeardev@gmail.com>
  */
 
 namespace Firebear\ImportExport\Model\Source\Config;
@@ -10,26 +10,26 @@ use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\Reader\Filesystem;
 use Magento\Framework\Config\ValidationStateInterface;
 
-/**
- * Class Reader
- */
 class Reader extends Filesystem
 {
+    /**
+     * @var array
+     */
     protected $_idAttributes = [
-        '/config/type' => 'name',
+        '/config/type' => 'name'
     ];
 
     /**
      * Reader constructor.
      *
      * @param FileResolverInterface    $fileResolver
-     * @param Converter                $converter
-     * @param SchemaLocator            $schemaLocator
+     * @param Converter                                          $converter
+     * @param SchemaLocator                                      $schemaLocator
      * @param ValidationStateInterface $validationState
-     * @param string                   $fileName
-     * @param array                    $idAttributes
-     * @param string                   $domDocumentClass
-     * @param string                   $defaultScope
+     * @param string                                             $fileName
+     * @param array                                              $idAttributes
+     * @param string                                             $domDocumentClass
+     * @param string                                             $defaultScope
      */
     public function __construct(
         FileResolverInterface $fileResolver,

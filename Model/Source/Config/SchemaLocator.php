@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright: Copyright © 2015 Firebear Studio. All rights reserved.
- * @author   : Firebear Studio <fbeardev@gmail.com>
+ * @author: Firebear Studio <fbeardev@gmail.com>
  */
 
 namespace Firebear\ImportExport\Model\Source\Config;
@@ -9,9 +9,6 @@ namespace Firebear\ImportExport\Model\Source\Config;
 use Magento\Framework\Config\SchemaLocatorInterface;
 use Magento\Framework\Module\Dir\Reader;
 
-/**
- * Class SchemaLocator
- */
 class SchemaLocator implements SchemaLocatorInterface
 {
     /**
@@ -19,23 +16,24 @@ class SchemaLocator implements SchemaLocatorInterface
      *
      * @var string
      */
-    protected $_schema = null;
+    protected $schema = null;
 
     /**
      * Path to corresponding XSD file with validation rules for separate config files
      *
      * @var string
      */
-    protected $_perFileSchema = null;
+    protected $perFileSchema = null;
 
     /**
      * @param Reader $moduleReader
      */
-    public function __construct(Reader $moduleReader)
-    {
+    public function __construct(
+        Reader $moduleReader
+    ) {
         $etcDir = $moduleReader->getModuleDir('etc', 'Firebear_ImportExport');
-        $this->_schema = $etcDir . '/source_types.xsd';
-        $this->_perFileSchema = $etcDir . '/source_types.xsd';
+        $this->schema = $etcDir . '/source_types.xsd';
+        $this->perFileSchema = $etcDir . '/source_types.xsd';
     }
 
     /**
@@ -45,7 +43,7 @@ class SchemaLocator implements SchemaLocatorInterface
      */
     public function getSchema()
     {
-        return $this->_schema;
+        return $this->schema;
     }
 
     /**
@@ -55,6 +53,6 @@ class SchemaLocator implements SchemaLocatorInterface
      */
     public function getPerFileSchema()
     {
-        return $this->_perFileSchema;
+        return $this->perFileSchema;
     }
 }
