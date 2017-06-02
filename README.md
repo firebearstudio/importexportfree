@@ -48,7 +48,6 @@ The paid one adds:
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import">
 <b>Buy Improved Import for Magento 2 CE & EE </b></a><br />
-<a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img width="300" src="https://firebearstudio.com/blog/wp-content/uploads/2016/05/module_logos3-1.jpg" /></a>
 
 <b>Full version of Imroved Import in action:</b>
 
