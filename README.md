@@ -68,6 +68,8 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>API connection between Magento 2 and Shopify , BigCommerce, and other cloud-based SAAS ecommerce platforms - effortlessly import and export products, customers, and other data on the fly - without creating CSV files! Setup synchronization between your Magento 2 store and other ecommerce platforms in a few clicks;</li>
 	<li>Improved Import auto-upgrade - built-in system to keep your Improved Import copy up to date and get new import features, bug fix, and patches in Magento 2 instantly!</li>
 	<li>Unzip / untar archive with a CSV file before import - flexible import of large compressed data;</li>
+	<li>Order export / import - CSV & XML </li>
+	<li>Import products from XML files with flexible mapping</li>
 	<li>Export mapping - all import mapping flexibility during data export from Magento 2 - create any kind of CSV, XML, and TXT files to export product, categories, orders, and customers from Magento 2!</li>
 	<li>Custom data structure mapping for categories, customers, discount codes, catalog price rules, import! Full flexibility of data import to Magento 2!</li>
 	<li>Product data auto translation during import by Google or Bing - great for import to different store views;</li>
@@ -76,7 +78,7 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>Full covarage by unit and integrations tests </li>
 	<li>Extension is submitted and will be available soon on Magento Marketplace</li>
 	<li>API for Magento 2 Import and Improved Import functionality</li>
-	<li>Full XML format support for import with same features and entites as for CSV</li>
+	<li>Import from Google Sheet (Google Drive Table) - dynamically manage Magento 2 products catalog in the cloud and trigger import</li>
 </ul>
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/files/m2import/magento2-dropbox-box-drive-ftp-products-images-import.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" /></a>
