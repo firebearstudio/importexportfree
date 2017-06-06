@@ -81,6 +81,8 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>Import from Google Sheet (Google Drive Table) - dynamically manage Magento 2 products catalog in the cloud and trigger import</li>
 </ul>
 
+<a href="https://firebearstudio.com/blog/the-complete-guide-to-magento-2-product-import-export.html">Magento 2 Import Guide</a>
+
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/files/m2import/magento2-dropbox-box-drive-ftp-products-images-import.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" /></a>
 
 <img src="https://firebearstudio.com/files/m2import/magento-import-dropbox.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" />
