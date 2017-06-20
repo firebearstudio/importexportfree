@@ -79,6 +79,7 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>Extension is submitted and will be available soon on Magento Marketplace</li>
 	<li>API for Magento 2 Import and Improved Import functionality</li>
 	<li>Import from Google Sheet (Google Drive Table) - dynamically manage Magento 2 products catalog in the cloud and trigger import</li>
+	<li>JSON format support for import and export products , orders etc</li>
 </ul>
 
 <a href="https://firebearstudio.com/blog/the-complete-guide-to-magento-2-product-import-export.html">Magento 2 Import Guide</a>
