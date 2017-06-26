@@ -69,7 +69,7 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>Improved Import auto-upgrade - built-in system to keep your Improved Import copy up to date and get new import features, bug fix, and patches in Magento 2 instantly!</li>
 	<li>Unzip / untar archive with a CSV file before import - flexible import of large compressed data;</li>
 	<li>Order export / import - CSV & XML </li>
-	<li>Import products from XML files with flexible mapping</li>
+	<li>Import products, categories, customers from XML files with flexible mapping</li>
 	<li>Export mapping - all import mapping flexibility during data export from Magento 2 - create any kind of CSV, XML, and TXT files to export product, categories, orders, and customers from Magento 2!</li>
 	<li>Custom data structure mapping for categories, customers, discount codes, catalog price rules, import! Full flexibility of data import to Magento 2!</li>
 	<li>Product data auto translation during import by Google or Bing - great for import to different store views;</li>
