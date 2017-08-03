@@ -82,6 +82,9 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>JSON format support for import and export products , orders etc</li>
 	<li>Auto create configurable product during the import from simple products by SKU pattern</li>
 	<li>Option to delete / disable products which is not included on CSV file or specific import job</li>
+	<li>API connection to external SAP, ERP, PIM, CRM systems</li>
+	<li>Combine import / export jobs to queue with dependencies and custom logic between</li>
+	<li>Multiple files and sources input for one import / export job - merge and split data and files on the fly, advanced data modificators and processors (export only products with stock less than X etc.</li> 
 </ul>
 
 <a href="https://firebearstudio.com/blog/the-complete-guide-to-magento-2-product-import-export.html">Magento 2 Import Guide</a>
