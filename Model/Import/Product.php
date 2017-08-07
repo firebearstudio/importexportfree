@@ -20,6 +20,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Psr\Log\LoggerInterface;
+use Firebear\ImportExport\Logger\Logger;
 
 class Product extends MagentoProduct
 {
@@ -79,49 +80,57 @@ class Product extends MagentoProduct
      */
     protected $productHelper;
 
-    protected $output;//temp
+    /**
+     * @var Logger
+     */
+    protected $importLogger;
 
     /**
-     * @param \Magento\Framework\App\Request\Http                                          $request
-     * @param \Firebear\ImportExport\Helper\Data                                           $helper
-     * @param \Magento\Framework\Json\Helper\Data                                          $jsonHelper
-     * @param \Magento\ImportExport\Helper\Data                                            $importExportData
-     * @param \Magento\ImportExport\Model\ResourceModel\Import\Data                        $importData
-     * @param \Magento\Eav\Model\Config                                                    $config
-     * @param \Magento\Framework\App\ResourceConnection                                    $resource
-     * @param \Magento\ImportExport\Model\ResourceModel\Helper                             $resourceHelper
-     * @param \Magento\Framework\Stdlib\StringUtils                                        $string
-     * @param ProcessingErrorAggregatorInterface                                           $errorAggregator
-     * @param \Magento\Framework\Event\ManagerInterface                                    $eventManager
-     * @param \Magento\CatalogInventory\Api\StockRegistryInterface                         $stockRegistry
-     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface                    $stockConfiguration
-     * @param \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface              $stockStateProvider
-     * @param \Magento\Catalog\Helper\Data                                                 $catalogData
-     * @param Import\Config                                                                $importConfig
+     * Product constructor.
+     * @param \Magento\Framework\App\Request\Http $request
+     * @param \Firebear\ImportExport\Helper\Data $helper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param \Magento\ImportExport\Helper\Data $importExportData
+     * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
+     * @param \Magento\Eav\Model\Config $config
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
+     * @param \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface $stockStateProvider
+     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param Import\Config $importConfig
      * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory
-     * @param MagentoProduct\OptionFactory                                                 $optionFactory
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory      $setColFactory
-     * @param MagentoProduct\Type\Factory                                                  $productTypeFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product\LinkFactory                     $linkFactory
-     * @param \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory               $proxyProdFactory
-     * @param \Magento\CatalogImportExport\Model\Import\UploaderFactory                    $uploaderFactory
-     * @param \Magento\Framework\Filesystem                                                $filesystem
-     * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory              $stockResItemFac
-     * @param DateTime\TimezoneInterface                                                   $localeDate
-     * @param DateTime                                                                     $dateTime
-     * @param LoggerInterface                                                              $logger
-     * @param \Magento\Framework\Indexer\IndexerRegistry                                   $indexerRegistry
-     * @param MagentoProduct\StoreResolver                                                 $storeResolver
-     * @param MagentoProduct\SkuProcessor                                                  $skuProcessor
-     * @param MagentoProduct\CategoryProcessor                                             $categoryProcessor
-     * @param MagentoProduct\Validator                                                     $validator
-     * @param ObjectRelationProcessor                                                      $objectRelationProcessor
-     * @param TransactionManagerInterface                                                  $transactionManager
-     * @param TaxClassProcessor                                                            $taxClassProcessor
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface                           $scopeConfig
-     * @param \Magento\Catalog\Model\Product\Url                                           $productUrl
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory                    $attributeFactory
-     * @param array                                                                        $data
+     * @param MagentoProduct\OptionFactory $optionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setColFactory
+     * @param MagentoProduct\Type\Factory $productTypeFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\LinkFactory $linkFactory
+     * @param \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory $proxyProdFactory
+     * @param \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $stockResItemFac
+     * @param DateTime\TimezoneInterface $localeDate
+     * @param DateTime $dateTime
+     * @param Logger $importLogger
+     * @param LoggerInterface $logger
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @param MagentoProduct\StoreResolver $storeResolver
+     * @param MagentoProduct\SkuProcessor $skuProcessor
+     * @param MagentoProduct\CategoryProcessor $categoryProcessor
+     * @param MagentoProduct\Validator $validator
+     * @param ObjectRelationProcessor $objectRelationProcessor
+     * @param TransactionManagerInterface $transactionManager
+     * @param TaxClassProcessor $taxClassProcessor
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Catalog\Model\Product\Url $productUrl
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
+     * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
+     * @param \Magento\Catalog\Helper\Product $productHelper
+     * @param array $data
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -151,6 +160,7 @@ class Product extends MagentoProduct
         \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory $stockResItemFac,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         DateTime $dateTime,
+        Logger $importLogger,
         LoggerInterface $logger,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
@@ -174,7 +184,7 @@ class Product extends MagentoProduct
         $this->eavEntityFactory = $eavEntityFactory;
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->productHelper = $productHelper;
-
+        $this->importLogger = $importLogger;
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -572,6 +582,9 @@ class Product extends MagentoProduct
                     $entityRowsUp
                 );
             }
+            
+            $this->importLogger->debug('Imported: ' . count($entityRowsIn) . ' rows');
+            $this->importLogger->debug('Updated: ' . count($entityRowsUp) . ' rows');
 
             $this->_saveProductWebsites(
                 $this->websitesCache
@@ -822,6 +835,7 @@ class Product extends MagentoProduct
             $invalidColumns = [];
             $invalidAttributes = [];
             foreach ($this->getSource()->getColNames() as $columnName) {
+                $this->importLogger->debug('Checked column '.$columnNumber);//temp
                 $columnNumber++;
                 if (!$this->isAttributeParticular($columnName)) {
 
@@ -902,9 +916,13 @@ class Product extends MagentoProduct
             $this->addErrors(self::ERROR_CODE_COLUMN_EMPTY_HEADER, $emptyHeaderColumns);
             $this->addErrors(self::ERROR_CODE_COLUMN_NAME_INVALID, $invalidColumns);
 
+            $this->importLogger->debug('Finish checking columns');//temp
+            $this->importLogger->debug('Errors count: ' . $this->getErrorAggregator()->getErrorsCount());//temp
             if (!$this->getErrorAggregator()->getErrorsCount()) {
+                $this->importLogger->debug('Start saving bunches');//temp
                 $this->mergeFieldsMap();
                 $this->_saveValidatedBunches();
+                $this->importLogger->debug('Finish saving bunches');//temp
                 $this->_dataValidated = true;
             }
         }
