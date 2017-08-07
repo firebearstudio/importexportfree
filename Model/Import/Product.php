@@ -20,7 +20,6 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Output\ConsoleOutput;//temp
 
 class Product extends MagentoProduct
 {
@@ -169,7 +168,6 @@ class Product extends MagentoProduct
         \Magento\Catalog\Helper\Product $productHelper,
         array $data = []
     ) {
-        $this->output = new ConsoleOutput(); //temp
         $this->_request = $request;
         $this->_helper = $helper;
         $this->attributeFactory = $attributeFactory;
@@ -575,9 +573,6 @@ class Product extends MagentoProduct
                 );
             }
 
-            $this->output->writeln('Imported: ' . count($entityRowsIn) . ' rows');
-            $this->output->writeln('Updated: ' . count($entityRowsUp) . ' rows');
-
             $this->_saveProductWebsites(
                 $this->websitesCache
             )->_saveProductCategories(
@@ -827,7 +822,6 @@ class Product extends MagentoProduct
             $invalidColumns = [];
             $invalidAttributes = [];
             foreach ($this->getSource()->getColNames() as $columnName) {
-                $this->output->writeln('Checked column '.$columnNumber);//temp
                 $columnNumber++;
                 if (!$this->isAttributeParticular($columnName)) {
 
@@ -908,13 +902,9 @@ class Product extends MagentoProduct
             $this->addErrors(self::ERROR_CODE_COLUMN_EMPTY_HEADER, $emptyHeaderColumns);
             $this->addErrors(self::ERROR_CODE_COLUMN_NAME_INVALID, $invalidColumns);
 
-            $this->output->writeln('Finish checking columns');//temp
-            $this->output->writeln('Errors count: ' . $this->getErrorAggregator()->getErrorsCount());//temp
             if (!$this->getErrorAggregator()->getErrorsCount()) {
-                $this->output->writeln('Start saving bunches');//temp
                 $this->mergeFieldsMap();
                 $this->_saveValidatedBunches();
-                $this->output->writeln('Finish saving bunches');//temp
                 $this->_dataValidated = true;
             }
         }
