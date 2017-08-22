@@ -63,7 +63,7 @@ Since we are continuously working on Improved Import features following communit
 
 After purchasing the extension, you will receive free upgrades during one year and also will get 50% discount for the second year upgrades! This mean you can purchase extension now to use current features and get free updates with powerful new features!
 <ul>
-	<li>CSV mapping presets for Magento 1.x CE &amp; EE , Shopify , BigCommerce , WooCommerce , Prestashop, and other major ecommerce systems - to make migration to Magento 2 and sync with the platform extremely easy!</li>
+	<li>CSV mapping import / export presets for Magento 1.x CE &amp; EE , Shopify , Zoey, BigCommerce , WooCommerce , Prestashop, and other major ecommerce systems - to make migration to Magento 2 and sync with the platform extremely easy!</li>
 	<li>API connection between Magento 2 and Shopify , BigCommerce, and other cloud-based SAAS ecommerce platforms - effortlessly import and export products, customers, and other data on the fly - without creating CSV files! Setup synchronization between your Magento 2 store and other ecommerce platforms in a few clicks;</li>
 	<li>Improved Import auto-upgrade - built-in system to keep your Improved Import copy up to date and get new import features, bug fix, and patches in Magento 2 instantly!</li>
 	<li>Unzip / untar archive with a CSV file before import - flexible import of large compressed data;</li>
