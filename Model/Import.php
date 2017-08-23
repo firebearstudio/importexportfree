@@ -155,15 +155,27 @@ class Import extends \Magento\ImportExport\Model\Import {
 
             try {
                 $result = $source->uploadSource();
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
             }
+        } else {
+            $uploader = $this->_uploaderFactory->create(['fileId' => self::FIELD_NAME_SOURCE_FILE]);
+            if ($uploader->getFileExtension() == 'tar') {
+                $uploader->skipDbProcessing(true);
+                $archiveData = $uploader->save($this->getWorkingDir());
+                $phar        = new \PharData($archiveData['path'] . $archiveData['file']);
+                $phar->extractTo($archiveData['path'], null, true);
+                $fileName = $phar->getFilename();
+                $result   = $result['path'] . $fileName;
+            }
+
         }
 
         if ($result) {
             $sourceFileRelative = $this->_varDirectory->getRelativePath($result);
-            $entity = $this->getEntity();
+            $entity             = $this->getEntity();
             $this->createHistoryReport($sourceFileRelative, $entity);
+
             return $result;
         }
 
