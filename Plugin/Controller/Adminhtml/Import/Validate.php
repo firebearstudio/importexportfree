@@ -221,4 +221,13 @@ class Validate
         }
         return $this->importModel;
     }
+
+    /**
+     * @param $errorAggregator
+     * @return mixed
+     */
+    protected function getSystemExceptions($errorAggregator)
+    {
+        return $errorAggregator->getErrorsByCode([AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION]);
+    }
 }
