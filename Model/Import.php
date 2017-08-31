@@ -160,13 +160,17 @@ class Import extends \Magento\ImportExport\Model\Import {
             }
         } else {
             $uploader = $this->_uploaderFactory->create(['fileId' => self::FIELD_NAME_SOURCE_FILE]);
-            if ($uploader->getFileExtension() == 'tar') {
+            $extension = $uploader->getFileExtension();
+            if ($extension == 'tar') {
                 $uploader->skipDbProcessing(true);
                 $archiveData = $uploader->save($this->getWorkingDir());
                 $phar        = new \PharData($archiveData['path'] . $archiveData['file']);
                 $phar->extractTo($archiveData['path'], null, true);
                 $fileName = $phar->getFilename();
                 $result   = $result['path'] . $fileName;
+            } elseif ($extension == 'txt') {
+                $fileData = $uploader->save($this->getWorkingDir());
+                $result = $fileData['path'] . $fileData['file'];
             }
 
         }

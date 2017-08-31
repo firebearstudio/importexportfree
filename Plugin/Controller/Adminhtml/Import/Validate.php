@@ -80,12 +80,20 @@ class Validate
             /** @var $import \Magento\ImportExport\Model\Import */
             $import = $this->getImportModel()->setData($data);
             try {
-                $source = Adapter::findAdapterFor(
-                    $import->uploadSource(),
-                    $this->objectManager->create(\Magento\Framework\Filesystem::class)
-                        ->getDirectoryWrite(DirectoryList::ROOT),
-                    $data[$import::FIELD_FIELD_SEPARATOR]
-                );
+                $sourcePath = $import->uploadSource();
+                $directory = $this->objectManager->create(\Magento\Framework\Filesystem::class)
+                    ->getDirectoryWrite(DirectoryList::ROOT);
+
+                if (stripos($sourcePath, '.txt')) {
+                    $source = new \Firebear\ImportExport\Model\Import\Source\Txt(
+                        $sourcePath,
+                        $directory,
+                        $data[$import::FIELD_FIELD_SEPARATOR]
+                    );
+                } else {
+                    $source = Adapter::findAdapterFor($sourcePath, $directory, $data[$import::FIELD_FIELD_SEPARATOR]);
+                }
+
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
             } catch (LocalizedException $e) {
                 $resultBlock->addError($e->getMessage());
