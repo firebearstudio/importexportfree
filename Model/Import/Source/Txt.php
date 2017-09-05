@@ -65,18 +65,24 @@ class Txt extends \Magento\ImportExport\Model\Import\AbstractSource
 
     protected function _getNextRow()
     {
-        $parsed = $this->_file->readLine();
-        //TODO
+        $parsed = $this->_file->readCsv(0, $this->_delimiter, $this->_enclosure);
+
         if (is_array($parsed) && count($parsed) != $this->_colQty) {
-            foreach ($parsed as $element) {
+            foreach ($parsed as $key => $element) {
                 if (strpos($element, "'") !== false) {
                     $this->_foundWrongQuoteFlag = true;
                     break;
+                }
+
+                if ($element == "") {
+                    unset($parsed[$key]);
                 }
             }
         } else {
             $this->_foundWrongQuoteFlag = false;
         }
+
+
         return is_array($parsed) ? $parsed : [];
     }
 
