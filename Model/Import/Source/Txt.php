@@ -23,8 +23,9 @@ class Txt extends \Magento\ImportExport\Model\Import\AbstractSource
             throw new \LogicException("Unable to open file: '{$file}'");
         }
         if ($delimiter) {
-            $this->_delimiter = $delimiter;
+            $this->_delimiter = quotemeta($delimiter);
         }
+
         $this->_enclosure = $enclosure;
         parent::__construct($this->_getNextRow());
     }
