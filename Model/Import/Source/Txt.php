@@ -2,6 +2,8 @@
 
 namespace Firebear\ImportExport\Model\Import\Source;
 
+use Braintree\Exception;
+
 class Txt extends \Magento\ImportExport\Model\Import\AbstractSource
 {
     protected $_file;
@@ -46,7 +48,7 @@ class Txt extends \Magento\ImportExport\Model\Import\AbstractSource
         }
 
         $checkerEnclosure = false;
-        $deletedItems = 0;
+        $resultArray = [];
 
         if (is_array($parsed) && count($parsed) != $this->_colQty) {
             foreach ($parsed as $key => $item) {
@@ -54,9 +56,9 @@ class Txt extends \Magento\ImportExport\Model\Import\AbstractSource
                 $strripos = strripos($item, $this->_enclosure);
 
                 if ($checkerEnclosure !== false) {
-                    $parsed[$checkerEnclosure] = $parsed[$checkerEnclosure] . $item;
-                    array_splice($parsed, $key - $deletedItems, 1);
-                    $deletedItems++;
+                    $resultArray[$checkerEnclosure] .= $item;
+                } else {
+                    $resultArray[$key] = $item;
                 }
 
                 if (strpos($item, $this->_enclosure) !== false && $strpos == $strripos) {
@@ -69,7 +71,23 @@ class Txt extends \Magento\ImportExport\Model\Import\AbstractSource
             }
         }
 
-        return is_array($parsed) ? $parsed : [];
+
+
+
+        return $resultArray ? $this->removeEnclosure($resultArray) : $this->removeEnclosure($parsed);
+    }
+
+    protected function removeEnclosure($array)
+    {
+        if (!is_array($array)) {
+            return $array;
+        }
+
+        foreach ($array as &$item) {
+            $item = str_replace('"', "", $item);
+        }
+
+        return $array;
     }
 
     public function rewind()
