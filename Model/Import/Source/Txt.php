@@ -25,7 +25,7 @@ class Txt extends \Magento\ImportExport\Model\Import\AbstractSource
             throw new \LogicException("Unable to open file: '{$file}'");
         }
         if ($delimiter) {
-            $this->_delimiter = quotemeta($delimiter);
+            $this->_delimiter = $delimiter;
         }
 
         $this->_enclosure = $enclosure;
@@ -43,6 +43,8 @@ class Txt extends \Magento\ImportExport\Model\Import\AbstractSource
     {
         try {
             $parsed = preg_split("/" . $this->_delimiter . "/", $this->_file->readLine(0, "\n"));
+            error_log("/" . $this->_delimiter . "/");
+            error_log(json_encode($parsed));
         } catch (\Exception $e) {
             $parsed = false;
         }
