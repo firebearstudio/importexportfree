@@ -32,6 +32,8 @@ The free version of Improved Import offers the following features:
 - csv file import from Dropbox or via Custom URL and FTP 
 - debug import in var/log/firebear-import.log
 - untar / unzip achive with CSV file inside
+- TXT files format support additionally to CSV. TXT can be tab (\t) or space(\s) separated
+
 <h3>Full paid version features</h3>
 
 The paid one adds:
