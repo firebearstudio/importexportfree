@@ -2,7 +2,7 @@
   "name": "firebear/importexportfree",
   "description": "Improve default Magento 2 Import / Export features https://firebearstudio.com/blog/",
   "require": {
-    "php": "~5.5.0|~5.6.0|~7.0.0",
+    "php": "~5.5.0|~5.6.0|~7.0.0|~7.1",
     "kunalvarma05/dropbox-php-sdk": "0.2.*"
   },
   "type": "magento2-module",
