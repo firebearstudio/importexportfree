@@ -51,6 +51,8 @@ The paid one adds:
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import">
 <b>Buy Improved Import for Magento 2 CE & EE </b></a><br />
 
+<a href="https://github.com/firebearstudio/magento2-import-export-sample-files" title ="Magento 2 Import Sample Files" target="_blank">Magento 2 Import Sample files</a>
+
 <b>Full version of Imroved Import in action:</b>
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/media/wysiwyg/magento2-cron-import-custom-mapping.gif"></a>
