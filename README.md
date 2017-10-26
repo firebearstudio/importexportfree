@@ -1,3 +1,5 @@
+<a href="https://firebearstudio.com/the-improved-import.html" title="magento 2 import"><img src="https://firebearstudio.com/blog/wp-content/uploads/2016/06/import-mapping-cron-magento2.png" alt="magento 2 cron import & export" title="magento 2 cron import & export" />
+
 # Magento 2 - Improved Import / Export extension  
 
 We’ve started a new project aimed at improving the default Magento 2 import / export functionality. Although this process is significantly refined now, it still lacks some important features; therefore we are developing this Magento 2 extension. Now, you can easily import product custom options, product images from remote URL, or tier prices out-of-the-box, but there is still room for improvement. 
@@ -36,17 +38,16 @@ The free version of Improved Import offers the following features:
 
 <h3>Full paid version features</h3>
 
-The paid one adds:
-- Google Drive and Box integration (the free version supports only Dropbox)
-- Scheduled cron job for csv file import from all supported sources. This is a great solution for keeping product stocks and data updated automatically. 
-- CSV file product export to Box, Google Drive, Dropbox, or other sources via FTP
-- Product images export to Box, Google Drive, Dropbox, or other sources via FTP
-- Dedicated simple categories import from CSV file (by default in M2 categories can be imported only together with assigned products)
-- Import product attaibutes and attribute values on the fly creation 
-- Import downloadable products 
-- Import fields mapping (in Magento 1.x style!) – you can map Magento 2 product attributes to any custom CSV column in your file! Fully flexible and powerful way to import custom data structures in Magento!
-- Categories import 
-- 1 year of free support and help with import from FireBear Team (also extra consultancy and customisation packages available!)  
+<b>Improved Import & Export Full version features:
+- CSV, XML & TXT support 
+- Flexible cron jobs (admin run, CLI)
+- Powerful import & export mapping for any data structure with filters and static values
+- Categories, Attributes and values import
+- Orders, invoices, shippings export 
+- Supported sources: FTP, SFTP, URL, Dropbox
+- Support all product types, customers, orders
+- Magento 1 products migration preset
+- User friendly & intuitive interface </b>
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import">
 <b>Buy Improved Import for Magento 2 CE & EE </b></a><br />
