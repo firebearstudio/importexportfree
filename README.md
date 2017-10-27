@@ -69,6 +69,9 @@ Since we are continuously working on Improved Import features following communit
 
 After purchasing the extension, you will receive free upgrades during one year and also will get 50% discount for the second year upgrades! This mean you can purchase extension now to use current features and get free updates with powerful new features!
 <ul>
+	<li>Price and other product attributes modification on the fly during the import - increase, multiple, decrease, percent etc.</li>
+	<li>Continious import / export mapping improvements - merge or separate fileds and import to specific attribute</li>
+	<li>Mapping categories from source file to Magento 2 categories</li>
 	<li>MS Excel XLSX files native import and mapping - processing of complex Excel files with multiple pages, flexible file files mapping to Magento 2 products , customers and orders striucture </li>
 	<li>PDF spreadsheet parsing & OpenOffice formats support</li>
 	<li>JSON format support for import and export products , orders etc</li>
@@ -89,8 +92,9 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>Combine import / export jobs to queue with dependencies and custom logic between</li>
 	<li>Multiple files and sources input for one import / export job - merge and split data and files on the fly, advanced data modificators and processors (export only products with stock less than X etc.</li> 
 	<li>Implement all features of MAGMI for Magento 1 - custom images processing , improved speed , advanced data modifications on the import</li>
-	<li>Data feed export presets - easy export products from Magento 2 to major marketplaces and catalogs (eBay, Google Shopping,Google Product Ratings,Amazon Product Ads,Bing Product Ads,Bizrate,Rakuten,AdCell,AlleSchuhe,AllYouNeed,Adform,Adtarget.me,Become,Belboon,Beslist,Billiger.de,BOL,Ciao,Commission Junction,Choozen,Criteo,Dawanda,DooYoo,Facebook,Fruugo,Geizhals,GetPrice,Gimme,Guenstiger.de,Idealo,Junglee,Kelkoo,Kieskeurig,LadenZeile,LeGuide,Monetate,MyShopping.com.au,Nextag,Partner-Ads,Pikengo,Polyvore,Preisroboter,PriceGrabber,PriceRunner,PriceSpy,Prisguide,Prisjakt,Pronto,Singlefeed,ShareASale,ShopAlike,ShopCost,Shopping24,Schottenland,ShopMania,Shopwahl,Shopprice,Shopzilla,SoLebIch,Skinflint,Stylight,SuperClix,TheFind,TopPreise,TradeTracker,Tradedoubler,TrovaPrezzi,Twenga,Webgains,Yandex Market,Yatego, Etsy)</li>
 	<li>Import products to Magento 2 from open product catalogs like IceCat etc.</li>
+	<li>Data feed export presets - easy export products from Magento 2 to major marketplaces and catalogs (eBay, Google Shopping,Google Product Ratings,Amazon Product Ads,Bing Product Ads,Bizrate,Rakuten,AdCell,AlleSchuhe,AllYouNeed,Adform,Adtarget.me,Become,Belboon,Beslist,Billiger.de,BOL,Ciao,Commission Junction,Choozen,Criteo,Dawanda,DooYoo,Facebook,Fruugo,Geizhals,GetPrice,Gimme,Guenstiger.de,Idealo,Junglee,Kelkoo,Kieskeurig,LadenZeile,LeGuide,Monetate,MyShopping.com.au,Nextag,PartnerAds,Pikengo,Polyvore,Preisroboter,PriceGrabber,PriceRunner,PriceSpy,Prisguide,Prisjakt,Pronto,Singlefeed,ShareASale,ShopAlike,ShopCost,Shopping24,Schottenland,ShopMania,Shopwahl,Shopprice,Shopzilla,SoLebIch,Skinflint,Stylight,SuperClix,TheFind,TopPreise,TradeTracker,Tradedoubler,TrovaPrezzi,Twenga,Webgains,Yandex Market,Yatego, Etsy)</li>
+	
 </ul>
 
 <a href="https://firebearstudio.com/blog/the-complete-guide-to-magento-2-product-import-export.html">Magento 2 Import Guide</a>
