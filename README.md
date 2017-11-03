@@ -2,29 +2,12 @@
 
 # Magento 2 - Improved Import / Export extension  
 
-We’ve started a new project aimed at improving the default Magento 2 import / export functionality. Although this process is significantly refined now, it still lacks some important features; therefore we are developing this Magento 2 extension. Now, you can easily import product custom options, product images from remote URL, or tier prices out-of-the-box, but there is still room for improvement. 
-
-The Improved Import / Export Magento 2 extension provides the ability to import a CSV file with product data and product images from a remote FTP server or a cloud storage such as Dropbox, Box, or Google Drive. There is also an opportunity to perform the export of products and images to the same location. Due to a scheduled cron job feature, the extension offers automated product updates from a cloud storage. Thus, you can easily connect your Magento 2 store with 3th party tools, warehouses, product inventory management (PIM) systems, etc. As you can see, Improved Import / Export for Magento 2 is useful for automated product stock status updates as well as any other product attribute updates.
+We’ve started a new project aimed at improving the default Magento 2 import / export functionality. Although this process is significantly refined now, it still lacks some important features; therefore we are developing this Magento 2 extension. 
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import">
 <b>Full version - Improved Import for Magento 2 CE & EE </b></a><br />
 
-## Installation
-1. Run:
-```
-composer require firebear/importexportfree
-```
-``` 
-php -f bin/magento setup:upgrade
-```
-```
-php -f bin/magento setup:static-content:deploy
-```
-```
-php -f bin/magento cache:clean
-```
-
-<h2>Improved Import features</h2> 
+## Improved Import features
 
 <h3>Free version features</h3>
 
@@ -48,6 +31,21 @@ The free version of Improved Import offers the following features:
 - Support all product types, customers, orders
 - Magento 1 products migration preset
 - User friendly & intuitive interface </b>
+
+## Installation of Free version
+1. Run:
+```
+composer require firebear/importexportfree
+```
+``` 
+php -f bin/magento setup:upgrade
+```
+```
+php -f bin/magento setup:static-content:deploy
+```
+```
+php -f bin/magento cache:clean
+```
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import">
 <b>Buy Improved Import for Magento 2 CE & EE </b></a><br />
