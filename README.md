@@ -2,6 +2,9 @@
 
 # Magento 2 - Improved Import / Export extension  
 
+
+[![Total Downloads](https://poser.pugx.org/firebear/importexportfree/downloads)](https://packagist.org/packages/firebear/importexportfree)
+
 We’ve started a new project aimed at improving the default Magento 2 import / export functionality. Although this process is significantly refined now, it still lacks some important features; therefore we are developing this Magento 2 extension. 
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import">
