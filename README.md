@@ -34,7 +34,7 @@ The free version of Improved Import offers the following features:
 - Support all product types, customers, orders
 - Magento 1 products migration preset
 - User friendly & intuitive interface
-- FREE INSTALLATION AND CONSULTANCY AFETR PURCHASE! 
+- FREE INSTALLATION AND CONSULTANCY AFTER PURCHASE! 
 </b>
 
 ## Installation of Free version
