@@ -33,7 +33,9 @@ The free version of Improved Import offers the following features:
 - Supported sources: FTP, SFTP, URL, Dropbox
 - Support all product types, customers, orders
 - Magento 1 products migration preset
-- User friendly & intuitive interface </b>
+- User friendly & intuitive interface
+- FREE INSTALLATION AND CONSULTANCY AFETR PURCHASE! 
+</b>
 
 ## Installation of Free version
 1. Run:
