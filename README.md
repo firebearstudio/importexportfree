@@ -59,7 +59,9 @@ php -f bin/magento cache:clean
 
 <a href="https://firebearstudio.com/the-improved-import.html"><img src="https://firebearstudio.com/media/catalog/product/cache/1/small_image/040ec09b1e35df139433887a97daa66f/i/m/improved_mport_export_magento_2_flow_example_cron_mapping_xml_1.png" alt="imrpoved import & export magento 2 flow example - cron, mapping, custom data, XML, orders and integrations"/></a>
 
-<b>Full version of Imroved Import in action:</b>
+<b>Full version of Imroved Import overview:</b>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3a-ojGGKTvw" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/media/wysiwyg/magento2-cron-import-custom-mapping.gif"></a>
 
