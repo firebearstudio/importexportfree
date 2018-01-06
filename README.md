@@ -1,4 +1,4 @@
-<a href="https://firebearstudio.com/the-improved-import.html" title="magento 2 import"><img src="https://firebearstudio.com/blog/wp-content/uploads/2016/06/import-mapping-cron-magento2.png" alt="magento 2 cron import & export" title="magento 2 cron import & export" />
+<a href="https://firebearstudio.com/the-improved-import.html" title="magento 2 import"><img src="https://firebearstudio.com/blog/wp-content/uploads/2016/06/import-mapping-cron-magento2-extension.png" alt="magento 2 cron import & export" title="magento 2 cron import & export" />
 
 # Magento 2 - Improved Import / Export extension  
 
