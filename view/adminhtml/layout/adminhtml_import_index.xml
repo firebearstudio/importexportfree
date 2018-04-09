@@ -6,7 +6,13 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Firebear_ImportExport::css/menu.css"/>
+    </head>
     <body>
+        <referenceContainer name="page.content">
+            <block before="page_main_actions" class="Firebear\ImportExport\Block\Adminhtml\Menu" name="firebear.menu"/>
+        </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Backend\Block\Template" template="Firebear_ImportExport::import/form/before.phtml" name="firebear.import.form.before" as="firebear_form_before" after="import.form.before" />
         </referenceContainer>

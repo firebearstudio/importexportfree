@@ -48,6 +48,10 @@ class Converter implements ConverterInterface
                     'type' => $childNode->attributes->getNamedItem('type')->nodeValue,
                     'required' => ($childNode->attributes->getNamedItem('required'))
                         ? $childNode->attributes->getNamedItem('required')->nodeValue : false,
+                    'notice' => ($childNode->attributes->getNamedItem('notice'))
+                        ? $childNode->attributes->getNamedItem('notice')->nodeValue : '',
+                    'value' => ($childNode->attributes->getNamedItem('value'))
+                        ? $childNode->attributes->getNamedItem('value')->nodeValue : ''
                 ];
             }
         }

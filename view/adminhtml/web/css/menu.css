@@ -1,0 +1,22 @@
+.fire_menu {
+    margin:20px 0px;
+    padding:20px 10px;
+    border:1px solid #e3e3e3;
+    position:relative;
+}
+
+.fire_menu a {
+    font-weight: bold;
+    color: rgb(228,131,49);
+}
+.fire_menu img{
+    position:relative;
+    float:left;
+    top:-17px;
+    margin-right:5px;
+}
+
+
+.fire_menu a.first {
+    border-left:none;
+}

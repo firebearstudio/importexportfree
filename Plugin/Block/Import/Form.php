@@ -82,9 +82,9 @@ class Form
             );
 
             foreach ($type['fields'] as $fieldName => $field) {
-                if ($fieldName != 'file_path') {
-                    continue;
-                }
+              //  if ($fieldName != 'file_path') {
+              //      continue;
+              //  }
                 $fieldsets[$typeName]->addField(
                     $typeName . '_' . $fieldName,
                     $field['type'],
@@ -93,6 +93,8 @@ class Form
                         'label' => __($field['label']),
                         'title' => __($field['label']),
                         'required' => $field['required'],
+                        'note' => $field['notice'],
+                        'value' => $field['value'],
                         'class' => 'input-' . $field['type']
                     ]
                 );

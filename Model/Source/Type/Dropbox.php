@@ -99,17 +99,15 @@ class Dropbox extends AbstractType
     {
         if ($client = $this->getSourceClient()) {
             $filePath = $this->_directory->getAbsolutePath($this->getMediaImportPath() . $imageSting);
-            $sourceFilePath = $this->getData($this->code . '_file_path');
-            $sourceDir = dirname($sourceFilePath);
+            $sourceDir = $this->getData($this->code . '_import_images_file_dir');
             $dirname = dirname($filePath);
             if (!is_dir($dirname)) {
                 mkdir($dirname, 0775, true);
             }
             $fileResource = fopen($filePath, 'w+b');
-
-            if ($filePath) {
+            if ($this->getData($this->code . '_images_on_dropbox')) {
                 try {
-                    $client->download($sourceDir . '/' . $importImage, $filePath);
+                    $client->download($sourceDir . $importImage, $filePath);
                 } catch (\Kunnu\Dropbox\Exceptions\DropboxClientException $e) {
                     if ($e->getCode() == 0) {
                         $response = $this->jsonHelper->jsonDecode($e->getMessage());

@@ -98,15 +98,20 @@ class Ftp extends AbstractType
     protected function getSourceClient()
     {
         if (!$this->getClient()) {
-            if ($this->getData('host') && $this->getData('port') && $this->getData('user') && $this->getData('password')) {
-                $settings = $this->getData();
+            error_log("d333");
+
+            if ($this->getData('ftp_host') && $this->getData('ftp_port') && $this->getData('ftp_user') && $this->getData('ftp_password')) {
+                $settings['host'] = $this->getData('ftp_host');
+                $settings['port'] = $this->getData('ftp_port');
+                $settings['user'] = $this->getData('ftp_user');
+                $settings['password'] = $this->getData('ftp_password');
             } else {
                 $settings = $this->_scopeConfig->getValue(
                     'firebear_importexport/ftp',
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 );
             }
-
+            error_log(json_encode($settings));
             $settings['passive'] = true;
             try {
                 $connection = new \Firebear\ImportExport\Model\Filesystem\Io\Ftp();

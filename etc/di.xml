@@ -34,4 +34,22 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="FireMenuSchemaLocator" type="Firebear\ImportExport\Model\AbstractSchemaLocator">
+        <arguments>
+            <argument name="fileName" xsi:type="string">firebear_menu.xsd</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="FireMenuReader" type="Firebear\ImportExport\Model\AbstractReader">
+        <arguments>
+            <argument name="fileName" xsi:type="string">firebear_menu.xml</argument>
+            <argument name="converter" xsi:type="object">Firebear\ImportExport\Model\Source\Menu\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">FireMenuSchemaLocator</argument>
+        </arguments>
+    </virtualType>
+    <type name="Firebear\ImportExport\Model\Source\Menu\Config">
+        <arguments>
+            <argument name="reader" xsi:type="object">FireMenuReader</argument>
+            <argument name="cacheId" xsi:type="string">firebear_importexport_menu_config</argument>
+        </arguments>
+    </type>
 </config>

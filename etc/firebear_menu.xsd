@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @copyright: Copyright © 2017 Firebear Studio. All rights reserved.
+ * @author   : Firebear Studio <fbeardev@gmail.com>
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element name="add" type="AddDeclaration" minOccurs="0" maxOccurs="unbounded" />
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="AddDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Menu declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="href" type="xs:string" use="required"/>
+        <xs:attribute name="label" type="xs:string" use="required" />
+        <xs:attribute name="fullUrl" type="xs:boolean" use="required" />
+    </xs:complexType>
+</xs:schema>

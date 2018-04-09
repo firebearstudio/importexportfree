@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Firebear_ImportExport::css/menu.css"/>
+    </head>
+    <body>
+        <referenceContainer name="page.content">
+            <block before="page_main_actions" class="Firebear\ImportExport\Block\Adminhtml\Menu" name="firebear.menu"/>
+        </referenceContainer>
+    </body>
+</page>
