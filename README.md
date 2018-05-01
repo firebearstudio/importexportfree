@@ -46,6 +46,9 @@ The free version of Improved Import offers the following features:
 
 Import products directly from the Google Sheets. Edit the import table with your team or supplier. Paste a link. Hit import button. That's it.
 
+<img src="https://firebearstudio.com/media/wysiwyg/IIE_GoogleSheet_Gif.gif" alt="magento 2 google sheet import" title="magento 2 import from google shheets" />
+
+
 <a href="https://youtu.be/x1R3uqZJEGw">Magento 2 Google Sheet import screencast</a>
 
 ## Installation of a Free version
