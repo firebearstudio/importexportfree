@@ -27,19 +27,26 @@ The free version of Improved Import offers the following features:
 <a href="https://www.youtube.com/watch?v=3a-ojGGKTvw">Extension Video overview screencast</a>
 
 <b>Improved Import & Export Full version features:
-- CSV, XML & TXT support 
-- Flexible cron jobs (admin run, CLI)
-- Powerful import & export mapping for any data structure with filters and static values
-- Categories, Attributes and values import
-- Orders, invoices, shippings export 
-- Supported sources: FTP, SFTP, URL, Dropbox
+- CSV and XML support
+- Supported sources: FTP, SFTP, URL, Dropboxand Google Sheets
+- Import and export scheduling with cron jobs (admin run, CLI)
+- Powerful import & export attribute and catory mapping for any data structure with filters and static values
+- Import categories, CMS pages, cart price rules and other entities
+- Export orders, invoices, shipping data
 - Support all product types, customers, orders
-- Magento 1 products migration preset
+- Create configurable products on the fly
+- Magento 1 and Shopify products migration preset
 - User friendly & intuitive interface
+- No programming skills required
+- Customization endpoints
 - FREE INSTALLATION AND CONSULTANCY AFTER PURCHASE! 
 </b>
 
-## Installation of Free version
+NOW WITH GOOGLE SHEETS SUPPORT
+Import products directly from the Google Sheets. Edit the import table with your team or supplier. Paste a link. Hit import button. That's it.
+<a href="https://youtu.be/x1R3uqZJEGw">Magento 2 Google Sheet import</a>
+
+## Installation of a Free version
 1. Run:
 ```
 composer require firebear/importexportfree
