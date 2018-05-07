@@ -25,10 +25,10 @@ The free version of Improved Import offers the following features:
 <h3>Full paid version features</h3>
 
 <p>As of now, Improved Import and Export extension is a solid solution for improving Magento 2 import and export processes. The extension offers a complete solution for Magento 2 import/export automation.</p>
-<p style="align:center"><img src="https://firebearstudio.com/media/wysiwyg/ContentTopBanner.png" alt="Improved Import and Export business value" title="magento 2 import & export automation" /></p>
+<p style="align:center"><img src="https://firebearstudio.com/media/wysiwyg/ContentTopBanner.png" alt="Improved Import and Export business value" width="515" title="magento 2 import & export automation" /></p>
 The import extension for Magento 2 supports all product types and a number of additional entities such as: categories, CMS pages, cart price rules, categories. The extension is open code and customizable.
 
-<p style="align:center"><a href="https://www.youtube.com/watch?v=3a-ojGGKTvw"><img src="https://firebearstudio.com/media/wysiwyg/ContentTopBanner.png" alt="Improved Import and Export video overview" title="magento 2 import & export screencast" /></a></p>
+<p style="align:center"><a href="https://www.youtube.com/watch?v=3a-ojGGKTvw"><img src="https://firebearstudio.com/media/wysiwyg/Video_Overview.png" alt="Improved Import and Export video overview" title="magento 2 import & export screencast" /></a></p>
 
 <b>Improved Import & Export Full version features:
 - CSV and XML support
