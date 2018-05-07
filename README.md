@@ -34,14 +34,14 @@ The free version of Improved Import offers the following features:
 
 <b>Improved Import & Export Full version features:
 - CSV and XML support
-- Supported sources: FTP, SFTP, URL, Dropboxand Google Sheets
+- Supported sources: FTP, SFTP, URL, Dropbox and Google Sheets
 - Import and export scheduling with cron jobs (admin run, CLI)
-- Powerful import & export attribute and catory mapping for any data structure with filters and static values
+- Powerful import & export attribute and category mapping for any data structure with filters and static values
 - Import categories, CMS pages, cart price rules and other entities
 - Export orders, invoices, shipping data
 - Support all product types, customers, orders
 - Create configurable products on the fly
-- Magento 1 and Shopify products migration preset
+- Magento 1 and Shopify migration presets
 - User friendly & intuitive interface
 - No programming skills required
 - Customization endpoints
@@ -91,6 +91,7 @@ For more information about full version of Improved Import and Export extension:
 	<li><a href="https://firebearstudio.com/blog/improved-import-magento-2-extension-manual.html">Read through the Magento 2 import extension manual</a></li>
 	<li><a href="https://firebearstudio.com/blog/magento-2-import-and-export-guide-list.html">Read through the list of Magento 2 import guides</a></li>
 	<li><a href="https://firebearstudio.com/blog/the-improved-import-export-magento-2-extension-by-firebear.html">Read how it started and what's the plan</a></li>
+</ul>
 
 <a href="https://github.com/firebearstudio/customimportexport">Examples of customisation of paid version</a>
 
@@ -101,13 +102,12 @@ Since we are continuously working on Improved Import features following communit
 
 After purchasing the extension, you will receive free upgrades during one year and also will get 50% discount for the second year upgrades! This mean you can purchase extension now to use current features and get free updates with powerful new features!
 <ul>
-	<li>Price and other product attributes modification on the fly during the import - increase, multiple, decrease, percent etc.</li>
 	<li>Continious import / export mapping improvements - merge or separate fileds and import to specific attribute</li>
-	<li>Mapping categories from source file to Magento 2 categories</li>
+
 	<li>MS Excel XLSX files native import and mapping - processing of complex Excel files with multiple pages, flexible file files mapping to Magento 2 products , customers and orders striucture </li>
 	<li>PDF spreadsheet parsing & OpenOffice formats support</li>
 	<li>JSON format support for import and export products , orders etc</li>
-	<li>CSV mapping import / export presets for Magento 1.x CE &amp; EE , Shopify , Zoey, BigCommerce , WooCommerce , Prestashop, and other major ecommerce systems - to make migration to Magento 2 and sync with the platform extremely easy!</li>
+	<li>CSV mapping import / export presets for Zoey, BigCommerce , WooCommerce , Prestashop, and other major ecommerce systems - to make migration to Magento 2 and sync with the platform extremely easy!</li>
 	<li>API connection between Magento 2 and Shopify , BigCommerce, and other cloud-based SAAS ecommerce platforms - effortlessly import and export products, customers, and other data on the fly - without creating CSV files! Setup synchronization between your Magento 2 store and other ecommerce platforms in a few clicks;</li>
 	<li>Improved Import auto-upgrade - built-in system to keep your Improved Import copy up to date and get new import features, bug fix, and patches in Magento 2 instantly!</li>
 	<li>Order export / import - CSV & XML </li>
@@ -117,19 +117,18 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>Full covarage by unit and integrations tests </li>
 	<li>Extension is submitted and will be available soon on Magento Marketplace</li>
 	<li>API for Magento 2 Import and Improved Import functionality</li>
-	<li>Import from Google Sheet (Google Drive Table) - dynamically manage Magento 2 products catalog in the cloud and trigger import</li>
 	<li>Auto create configurable product during the import from simple products by SKU pattern</li>
 	<li>Option to delete / disable products which is not included on CSV file or specific import job</li>
 	<li>API connection to external SAP, ERP, PIM, CRM systems</li>
 	<li>Combine import / export jobs to queue with dependencies and custom logic between</li>
 	<li>Multiple files and sources input for one import / export job - merge and split data and files on the fly, advanced data modificators and processors (export only products with stock less than X etc.</li> 
-	<li>Implement all features of MAGMI for Magento 1 - custom images processing , improved speed , advanced data modifications on the import</li>
+	<li>Implement all features of MAGMI for Magento 1 - custom images processing, improved speed, advanced data modifications on the import</li>
 	<li>Import products to Magento 2 from open product catalogs like IceCat etc.</li>
 	<li>Data feed export presets - easy export products from Magento 2 to major marketplaces and catalogs (eBay, Google Shopping,Google Product Ratings,Amazon Product Ads,Bing Product Ads,Bizrate,Rakuten,AdCell,AlleSchuhe,AllYouNeed,Adform,Adtarget.me,Become,Belboon,Beslist,Billiger.de,BOL,Ciao,Commission Junction,Choozen,Criteo,Dawanda,DooYoo,Facebook,Fruugo,Geizhals,GetPrice,Gimme,Guenstiger.de,Idealo,Junglee,Kelkoo,Kieskeurig,LadenZeile,LeGuide,Monetate,MyShopping.com.au,Nextag,PartnerAds,Pikengo,Polyvore,Preisroboter,PriceGrabber,PriceRunner,PriceSpy,Prisguide,Prisjakt,Pronto,Singlefeed,ShareASale,ShopAlike,ShopCost,Shopping24,Schottenland,ShopMania,Shopwahl,Shopprice,Shopzilla,SoLebIch,Skinflint,Stylight,SuperClix,TheFind,TopPreise,TradeTracker,Tradedoubler,TrovaPrezzi,Twenga,Webgains,Yandex Market,Yatego, Etsy)</li>
 	
 </ul>
 
-<a href="https://firebearstudio.com/blog/the-complete-guide-to-magento-2-product-import-export.html">Magento 2 Import Guide</a>
+<p align="center" /><a href="https://firebearstudio.com/blog/the-complete-guide-to-magento-2-product-import-export.html">Read through Magento 2 Import Guide</a></p>
 
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/media/catalog/product/cache/1/small_image/040ec09b1e35df139433887a97daa66f/i/i/iie_01.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" /></a>
 
