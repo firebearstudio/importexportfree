@@ -26,7 +26,9 @@ The free version of Improved Import offers the following features:
 
 <p>As of now, Improved Import and Export extension is a solid solution for improving Magento 2 import and export processes. The extension offers a complete solution for Magento 2 import/export automation.</p>
 <p align="center" /><img src="https://firebearstudio.com/media/wysiwyg/ContentTopBanner.png" alt="Improved Import and Export business value" width="515" title="magento 2 import & export automation" /></p>
-The import extension for Magento 2 supports all product types and a number of additional entities such as: categories, CMS pages, cart price rules, categories. The extension is open code and customizable.
+<p>The import extension for Magento 2 supports all product types and a number of additional entities such as: categories, CMS pages, cart price rules, categories. The extension is open code and customizable.</p>
+
+<p><b>Improved Import and Export video overiew</b></p>
 
 <p align="center" /><a href="https://www.youtube.com/watch?v=3a-ojGGKTvw" target="_blank"><img src="https://firebearstudio.com/media/wysiwyg/Video_Overview.png" width="515" alt="Improved Import and Export video overview" title="magento 2 import & export screencast" /></a></p>
 
@@ -75,13 +77,20 @@ php -f bin/magento cache:clean
 
 <a href="https://github.com/firebearstudio/magento2-import-export-sample-files" title ="Magento 2 Import Sample Files" target="_blank">Magento 2 Import Sample files</a>
 
-<a href="https://firebearstudio.com/the-improved-import.html"><img src="https://firebearstudio.com/media/catalog/product/cache/1/small_image/040ec09b1e35df139433887a97daa66f/i/m/improved_mport_export_magento_2_flow_example_cron_mapping_xml_1.png" alt="imrpoved import & export magento 2 flow example - cron, mapping, custom data, XML, orders and integrations"/></a>
+<p align="center" max-width="75%" /><a href="https://firebearstudio.com/the-improved-import.html"><img src="https://firebearstudio.com/media/catalog/product/cache/1/small_image/040ec09b1e35df139433887a97daa66f/i/m/improved_mport_export_magento_2_flow_example_cron_mapping_xml_1.png" alt="imrpoved import & export magento 2 flow example - cron, mapping, custom data, XML, orders and integrations"/></a></p>
 
-<b>Full version of Imroved Import overview:</b>
+<h3 style="text-align: justify;">Full version of Improved Import overview:</h3>
 
-<a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/media/wysiwyg/importjob_workflow.gif"></a>
+<p>The extension introduces import and export jobs - a set of rules that dictate the job when and how to run. The .gif below illustrates the flow of creating and running the job.</p>
 
-For further information, read this post: <a href="https://firebearstudio.com/blog/the-improved-import-export-magento-2-extension-by-firebear.html" title="The Improved Import / Export Magento 2 Extension by Firebear" ><strong>The Improved Import / Export Magento 2 Extension by Firebear</strong></a>
+<p align="center" max-width="75%" /><a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/media/wysiwyg/importjob_workflow.gif"></a></p>
+
+For more information about full version of Improved Import and Export extension:
+<ul>
+	<li><a href="https://firebearstudio.com/the-improved-import.html">Visit Magento 2 Improved Import and Export extension product page</a></li>
+	<li><a href="https://firebearstudio.com/blog/magento-2-import-and-export-guide-list.html">Read through the list of Magento 2 import guides</a></li>
+	<li><a href="https://firebearstudio.com/blog/the-improved-import-export-magento-2-extension-by-firebear.html">Read how it started and what's the plan</a></li>
+<a href="https://firebearstudio.com/blog/the-improved-import-export-magento-2-extension-by-firebear.html" title="The Improved Import / Export Magento 2 Extension by Firebear" ><strong>The Improved Import / Export Magento 2 Extension by Firebear</strong></a>
 
 <a href="https://firebearstudio.com/blog/improved-import-magento-2-extension-manual.html"><b>Improved Import Extension manual and integration guide</b></a>
 
@@ -124,8 +133,8 @@ After purchasing the extension, you will receive free upgrades during one year a
 
 <a href="https://firebearstudio.com/blog/the-complete-guide-to-magento-2-product-import-export.html">Magento 2 Import Guide</a>
 
-<a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/files/m2import/magento2-dropbox-box-drive-ftp-products-images-import.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" /></a>
+<a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/media/catalog/product/cache/1/small_image/040ec09b1e35df139433887a97daa66f/i/i/iie_01.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" /></a>
 
-<img src="https://firebearstudio.com/files/m2import/magento-import-dropbox.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" />
+<img src="https://firebearstudio.com/media/catalog/product/cache/1/small_image/040ec09b1e35df139433887a97daa66f/i/i/iie_05.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" />
 
 
