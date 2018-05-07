@@ -83,16 +83,14 @@ php -f bin/magento cache:clean
 
 <p>The extension introduces import and export jobs - a set of rules that dictate the job when and how to run. The .gif below illustrates the flow of creating and running the job.</p>
 
-<p align="center" max-width="75%" /><a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/media/wysiwyg/importjob_workflow.gif"></a></p>
+<p align="center" width="75%" /><a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/media/wysiwyg/importjob_workflow.gif"></a></p>
 
 For more information about full version of Improved Import and Export extension:
 <ul>
 	<li><a href="https://firebearstudio.com/the-improved-import.html">Visit Magento 2 Improved Import and Export extension product page</a></li>
+	<li><a href="https://firebearstudio.com/blog/improved-import-magento-2-extension-manual.html">Read through the Magento 2 import extension manual</a></li>
 	<li><a href="https://firebearstudio.com/blog/magento-2-import-and-export-guide-list.html">Read through the list of Magento 2 import guides</a></li>
 	<li><a href="https://firebearstudio.com/blog/the-improved-import-export-magento-2-extension-by-firebear.html">Read how it started and what's the plan</a></li>
-<a href="https://firebearstudio.com/blog/the-improved-import-export-magento-2-extension-by-firebear.html" title="The Improved Import / Export Magento 2 Extension by Firebear" ><strong>The Improved Import / Export Magento 2 Extension by Firebear</strong></a>
-
-<a href="https://firebearstudio.com/blog/improved-import-magento-2-extension-manual.html"><b>Improved Import Extension manual and integration guide</b></a>
 
 <a href="https://github.com/firebearstudio/customimportexport">Examples of customisation of paid version</a>
 
