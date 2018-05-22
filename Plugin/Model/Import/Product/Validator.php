@@ -90,7 +90,7 @@ class Validator extends BaseValidator
                 $this->_addMessages(
                     [
                         sprintf(
-                            $this->context->retrieveMessageTemplate(
+                            $subject->context->retrieveMessageTemplate(
                                 RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_OPTION
                             ),
                             $attrCode
