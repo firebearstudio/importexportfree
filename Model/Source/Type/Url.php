@@ -31,14 +31,17 @@ class Url extends AbstractType
      */
     public function uploadSource()
     {
+        error_log("bb1");
         if ($read = $this->getSourceClient()) {
+            error_log("bb2");
             $fileName = preg_replace('/[^a-z0-9\._-]+/i', '', $this->_fileName);
+            $fileName = str_replace("%", "_", $fileName);
             $this->_directory->writeFile(
                 $this->_directory->getRelativePath($this->getImportPath() . '/' . $fileName),
                 $read->readAll()
             );
 
-            return $this->_directory->getRelativePath($this->getImportPath() . '/' . $fileName);
+            return $this->_directory->getAbsolutePath() . $this->_directory->getRelativePath($this->getImportPath() . '/' . $fileName);
         }
 
         return false;
@@ -71,7 +74,8 @@ class Url extends AbstractType
         }
 
         if ($url) {
-            $read = $this->_readFactory->create($url, DriverPool::HTTP);
+            $driver = $this->getProperDriverCode($matches);
+            $read = $this->_readFactory->create($url, $driver);
             $this->_directory->writeFile(
                 $this->_directory->getRelativePath($filePath),
                 $read->readAll()
@@ -120,10 +124,22 @@ class Url extends AbstractType
         if (!$this->client) {
             if (preg_match('/\bhttps?:\/\//i', $this->_fileName, $matches)) {
                 $url = str_replace($matches[0], '', $this->_fileName);
-                $this->client = $this->_readFactory->create($url, DriverPool::HTTP);
+                $driver = $this->getProperDriverCode($matches);
+                $this->client = $this->_readFactory->create($url, $driver);
             }
         }
 
         return $this->client;
+    }
+
+    protected function getProperDriverCode($matches)
+    {
+        if (is_array($matches)) {
+            return (false === strpos($matches[0], 'https'))
+                ? DriverPool::HTTP
+                : DriverPool::HTTPS;
+        } else {
+            return DriverPool::HTTP;
+        }
     }
 }

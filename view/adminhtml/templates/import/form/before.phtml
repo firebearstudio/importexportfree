@@ -1,4 +1,4 @@
-<?php
+        <?php
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -15,6 +15,9 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'prototype'], function(jQuery){
     varienImport.handleEntityTypeSelector = function() {
         var entity = jQuery('#entity');
         if (entity && entity.val()) {
+            var entityTo = jQuery('#import_source');
+            entityTo.val("");
+            varienImport.handleImportSourceSelector();
             this.showBehavior(entity.val());
             this.showImportSource(true);
             this.showSampleFile(entity.val());
@@ -34,7 +37,7 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'prototype'], function(jQuery){
             jQuery('#upload_' + entity.val() + '_fieldset')
                 .find('._required')
                 .addClass('required-entry')
-                .prop('disabled', false);
+                .attr("disabled", false);
         }
     };
 
@@ -73,6 +76,9 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'prototype'], function(jQuery){
         if (isShow == true) {
             jQuery('#import_source_fieldset').show();
         } else {
+            var entity = jQuery('#import_source');
+            jQuery('#upload_' + entity.val() + '_fieldset').hide();
+            entity.val("");
             jQuery('#import_source_fieldset').hide();
         }
         jQuery('.source-fieldset').find('._required').removeClass('required-entry').prop('disabled', true);

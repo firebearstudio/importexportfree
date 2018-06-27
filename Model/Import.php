@@ -149,10 +149,8 @@ class Import extends \Magento\ImportExport\Model\Import {
     public function uploadSource()
     {
         $result = null;
-
         if ($this->getImportSource() && $this->getImportSource() != 'file') {
             $source = $this->getSource();
-
             try {
                 $result = $source->uploadSource();
             } catch (\Exception $e) {
