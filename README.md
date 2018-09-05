@@ -33,12 +33,13 @@ The free version of Improved Import offers the following features:
 <p align="center" /><a href="https://www.youtube.com/watch?v=3a-ojGGKTvw" target="_blank"><img src="https://firebearstudio.com/media/wysiwyg/Video_Overview.png" width="515" alt="Improved Import and Export video overview" title="magento 2 import & export screencast" /></a></p>
 
 <b>Improved Import & Export Full version features:
-- CSV and XML support
+- CSV, XML, Json, XLSX, ODS file format support
 - Supported sources: FTP, SFTP, URL, Dropbox and Google Sheets
+- Use Rest and Soap APIs to connect to the external sources
 - Import and export scheduling with cron jobs (admin run, CLI)
 - Powerful import & export attribute and category mapping for any data structure with filters and static values
-- Import categories, CMS pages, cart price rules and other entities
-- Export orders, invoices, shipping data
+- Import categories, CMS pages, cart price rules, orders, attributes and other entities
+- Export orders, invoices, shipping data, attributes and other entities
 - Support all product types, customers, orders
 - Create configurable products on the fly
 - Magento 1 and Shopify migration presets
@@ -77,7 +78,7 @@ php -f bin/magento cache:clean
 
 <a href="https://github.com/firebearstudio/magento2-import-export-sample-files" title ="Magento 2 Import Sample Files" target="_blank">Magento 2 Import Sample files</a>
 
-<p align="center" max-width="75%" /><a href="https://firebearstudio.com/the-improved-import.html"><img src="https://firebearstudio.com/media/catalog/product/cache/1/small_image/040ec09b1e35df139433887a97daa66f/i/m/improved_mport_export_magento_2_flow_example_cron_mapping_xml_1.png" alt="imrpoved import & export magento 2 flow example - cron, mapping, custom data, XML, orders and integrations"/></a></p>
+<p align="center" max-width="75%" /><a href="https://firebearstudio.com/the-improved-import.html"><img src="https://firebearstudio.com/media/catalog/product/cache/1/small_image/040ec09b1e35df139433887a97daa66f/m/a/magento2importflowrestapi.png" alt="imrpoved import & export magento 2 flow example - cron, mapping, custom data, XML, orders and integrations"/></a></p>
 
 <h3 style="text-align: justify;">Full version of Improved Import overview:</h3>
 
@@ -104,11 +105,9 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>Continious import / export mapping improvements - merge or separate fileds and import to specific attribute</li>
 	<li>MS Excel XLSX files native import and mapping - processing of complex Excel files with multiple pages, flexible file files mapping to Magento 2 products , customers and orders striucture </li>
 	<li>PDF spreadsheet parsing & OpenOffice formats support</li>
-	<li>JSON format support for import and export products , orders etc</li>
 	<li>CSV mapping import / export presets for Zoey, BigCommerce , WooCommerce , Prestashop, and other major ecommerce systems - to make migration to Magento 2 and sync with the platform extremely easy!</li>
 	<li>API connection between Magento 2 and Shopify , BigCommerce, and other cloud-based SAAS ecommerce platforms - effortlessly import and export products, customers, and other data on the fly - without creating CSV files! Setup synchronization between your Magento 2 store and other ecommerce platforms in a few clicks;</li>
 	<li>Improved Import auto-upgrade - built-in system to keep your Improved Import copy up to date and get new import features, bug fix, and patches in Magento 2 instantly!</li>
-	<li>Order export / import - CSV & XML </li>
 	<li>Import & Export of ALL Magento 2 entites. Custom data structure mapping for categories, customers, discount codes, catalog price rules, CMS pages & static blocks etc. Full flexibility of data import & export to Magento 2!</li>
 	<li>Product data auto translation during import by Google or Bing - great for import to different store views;</li>
 	<li>Integration with API of data crawling services, such as https://www.import.io/. Crawl product data from any source and import it directly to Magento 2 - this oppens nearly endless possibilities!</li>
@@ -117,7 +116,7 @@ After purchasing the extension, you will receive free upgrades during one year a
 	<li>API for Magento 2 Import and Improved Import functionality</li>
 	<li>Auto create configurable product during the import from simple products by SKU pattern</li>
 	<li>Option to delete / disable products which is not included on CSV file or specific import job</li>
-	<li>API connection to external SAP, ERP, PIM, CRM systems</li>
+	<li>API connection templates to external SAP, ERP, PIM, CRM systems</li>
 	<li>Combine import / export jobs to queue with dependencies and custom logic between</li>
 	<li>Multiple files and sources input for one import / export job - merge and split data and files on the fly, advanced data modificators and processors (export only products with stock less than X etc.</li> 
 	<li>Implement all features of MAGMI for Magento 1 - custom images processing, improved speed, advanced data modifications on the import</li>
