@@ -1,4 +1,4 @@
-<a href="https://firebearstudio.com/the-improved-import.html" title="magento 2 import"><img src="https://firebearstudio.com/blog/wp-content/uploads/2016/06/import-mapping-cron-magento2-extension.png" alt="magento 2 cron import & export" title="magento 2 cron import & export" />
+<a href="https://firebearstudio.com/the-improved-import.html" title="magento 2 import"><img src="https://firebearstudio.com/media/firebear-magento2-extensions/magento2-import-extension.jpg" alt="magento 2 cron import & export" title="magento 2 cron import & export" />
 
 # Magento 2 - Improved Import / Export extension  
 
@@ -14,19 +14,19 @@ We’ve started a new project aimed at improving the default Magento 2 import / 
 
 <h3>Free version features</h3>
 
-The free version of Improved Import offers the following features:
+The free version of Improved Import Magento 2 extension complements native Magento 2 import procedure. The features of the extension are incorporated in the <b>System > Import</b> section. The FREE version of the extension offers the following features:
 
 - product images import from Dropbox or via Custom URL and FTP 
-- csv file import from Dropbox or via Custom URL and FTP 
+- CSV file import from Dropbox, Custom URL or FTP 
 - debug import in var/log/firebear-import.log
 - untar / unzip achive with CSV file inside
-- TXT files format support additionally to CSV. TXT can be tab (\t) or space(\s) separated
+- Supports Magento 2.1, 2.2 and 2.3 versions
 
 <h3>Full paid version features</h3>
 
 <p>As of now, Improved Import and Export extension is a solid solution for improving Magento 2 import and export processes. The extension offers a complete solution for Magento 2 import/export automation.</p>
 <p align="center" /><img src="https://firebearstudio.com/media/wysiwyg/ContentTopBanner.png" alt="Improved Import and Export business value" width="515" title="magento 2 import & export automation" /></p>
-<p>The import extension for Magento 2 supports all product types and a number of additional entities such as: categories, CMS pages, cart price rules, categories. The extension is open code and customizable.</p>
+<p>The import extension for Magento 2 supports all product types and a number of additional entities such as: categories, CMS pages and blocks, cart price rules, categories, orders. The extension is open code and customizable.</p>
 
 <p><b>Improved Import and Export video overiew</b></p>
 
@@ -34,6 +34,7 @@ The free version of Improved Import offers the following features:
 
 <b>Improved Import & Export Full version features:
 - CSV, XML, Json, XLSX, ODS file format support
+- Magento 2 B2B Add-On available for importing and export companies, shared catalogs, requisition lists, quotes (abandoned carts) and negotiable quotes
 - Supported sources: FTP, SFTP, URL, Dropbox and Google Sheets
 - Use Rest and Soap APIs to connect to the external sources
 - Import and export scheduling with cron jobs (admin run, CLI)
@@ -43,6 +44,7 @@ The free version of Improved Import offers the following features:
 - Support all product types, customers, orders
 - Create configurable products on the fly
 - Magento 1 and Shopify migration presets
+- Supports MagMi Magento 1 product files
 - User friendly & intuitive interface
 - No programming skills required
 - Customization endpoints
@@ -55,8 +57,7 @@ Import products directly from the Google Sheets. Edit the import table with your
 
 <img src="https://firebearstudio.com/media/wysiwyg/IIE_GoogleSheet_Gif.gif" alt="magento 2 google sheet import" title="magento 2 import from google shheets" />
 
-
-<a href="https://youtu.be/x1R3uqZJEGw">Magento 2 Google Sheet import screencast</a>
+<p align="center" /><a href="https://www.youtube.com/watch?v=x1R3uqZJEGw" target="_blank"><img src="https://firebearstudio.com/media/wysiwyg/Magento2_Google_Sheet_Import_thumbnail.pngg" width="515" alt="Improved Import and Export Google Sheet overview" title="magento 2 import & export Google Sheets screencast" /></a></p>
 
 ## Installation of a Free version
 1. Run:
