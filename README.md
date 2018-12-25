@@ -57,7 +57,7 @@ Import products directly from the Google Sheets. Edit the import table with your
 
 <img src="https://firebearstudio.com/media/wysiwyg/IIE_GoogleSheet_Gif.gif" alt="magento 2 google sheet import" title="magento 2 import from google shheets" />
 
-<p align="center" /><a href="https://www.youtube.com/watch?v=x1R3uqZJEGw" target="_blank"><img src="https://firebearstudio.com/media/wysiwyg/Magento2_Google_Sheet_Import_thumbnail.pngg" width="515" alt="Improved Import and Export Google Sheet overview" title="magento 2 import & export Google Sheets screencast" /></a></p>
+<p align="center" /><a href="https://www.youtube.com/watch?v=x1R3uqZJEGw" target="_blank"><img src="https://firebearstudio.com/media/wysiwyg/Magento2_Google_Sheet_Import_thumbnail.png" width="515" alt="Improved Import and Export Google Sheet overview" title="magento 2 import & export Google Sheets screencast" /></a></p>
 
 ## Installation of a Free version
 1. Run:
