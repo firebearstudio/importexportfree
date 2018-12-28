@@ -39,6 +39,11 @@ class Import extends \Magento\ImportExport\Model\Import {
     protected $_source;
 
     /**
+     * @var \Magento\ImportExport\Model\History
+     */
+    protected $importHistoryModel;
+
+    /**
      * @param \Firebear\ImportExport\Model\Source\ConfigInterface        $config
      * @param \Firebear\ImportExport\Helper\Data                         $helper
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface       $timezone
@@ -81,6 +86,7 @@ class Import extends \Magento\ImportExport\Model\Import {
         $this->_config = $config;
         $this->_helper = $helper;
         $this->_timezone = $timezone;
+        $this->importHistoryModel = $importHistoryModel;
 
         parent::__construct(
             $logger,
