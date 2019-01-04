@@ -28,6 +28,9 @@ The free version of Improved Import Magento 2 extension complements native Magen
 <p align="center" /><img src="https://firebearstudio.com/media/wysiwyg/ContentTopBanner.png" alt="Improved Import and Export business value" width="515" title="magento 2 import & export automation" /></p>
 <p>The import extension for Magento 2 supports all product types and a number of additional entities such as: categories, CMS pages and blocks, cart price rules, categories, orders. The extension is open code and customizable.</p>
 
+<h3 align="center" /><a href="http://magento2demo.firebearstudio.com/" >Visit our Magento 2 Open Source Demo store</a></h3>
+<h3 align="center" />Or leave a message in the chat to get your hands on the <a href="https://firebearstudio.com/blog/magento-2-b2b-commercecloud-how-to-import-and-export-companies-requisition-lists-shared-catalogs-and-negotiable-quotes.html" >Magento 2 Commerce/Cloud B2B demo store</a>.</h3>
+
 <p><b>Improved Import and Export video overiew</b></p>
 
 <p align="center" /><a href="https://www.youtube.com/watch?v=3a-ojGGKTvw" target="_blank"><img src="https://firebearstudio.com/media/wysiwyg/Video_Overview.png" width="515" alt="Improved Import and Export video overview" title="magento 2 import & export screencast" /></a></p>
@@ -131,5 +134,9 @@ After purchasing the extension, you will receive free upgrades during one year a
 <a href="https://firebearstudio.com/the-improved-import.html" title="Magento 2 Improved Import"><img src="https://firebearstudio.com/media/catalog/product/cache/1/small_image/040ec09b1e35df139433887a97daa66f/i/i/iie_01.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" /></a>
 
 <img src="https://firebearstudio.com/media/catalog/product/cache/1/small_image/040ec09b1e35df139433887a97daa66f/i/i/iie_05.png" alt="Magento 2 import from Dropbox, Box, Google, FTP" />
+
+##Partner with Firebear Studio
+Get special discounts, add features to the Improved Import development roadmap and more. Firebear Studio offers partnership opportunities for the development agencies and everyone who is interested in Firebear blog.
+<p align="center" /><a href="https://firebearstudio.com/blog/introducing-firebear-partner-loyalty-program.html">Read more about Firebear partner program</a></p>
 
 
