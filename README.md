@@ -34,7 +34,7 @@ The free version of Improved Import Magento 2 extension complements native Magen
 
 <b>Improved Import & Export Full version features:
 - CSV, XML, Json, XLSX, ODS file format support
-- Magento 2 B2B Add-On available for importing and export companies, shared catalogs, requisition lists, quotes (abandoned carts) and negotiable quotes
+- <b>Magento 2 B2B Add-On</b> available for importing and exporting companies, shared catalogs, requisition lists, quotes (abandoned carts) and negotiable quotes
 - Supported sources: FTP, SFTP, URL, Dropbox and Google Sheets
 - Use Rest and Soap APIs to connect to the external sources
 - Import and export scheduling with cron jobs (admin run, CLI)
