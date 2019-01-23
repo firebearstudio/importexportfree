@@ -2,7 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="source_types.xsd">
     <type name="dropbox" label="Dropbox" modelInstance="Firebear\ImportExport\Model\Source\Type\Dropbox" sortOrder="10">
        <field name="file_path" id="file_path" label="File Path" type="text" required="true" />
-       <!-- <field name="access_token" id="access_token" label="Access Token" type="text" required="true" />-->
+        <field name="access_token" id="access_token" label="Access Token" type="text" required="true" />
         <field name="images_on_dropbox" id="images_on_dropbox" label="Import Images From Dropbox" type="checkbox" value="1"/>
         <field name="import_images_file_dir" id="file_import_images_file_dir" label="Images File Directory" type="text" notice="Use relative path to Magento installation, e.g. var/import/images/"/>
     </type>

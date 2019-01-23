@@ -1,223 +1,193 @@
 <?php
 /**
- * @copyright: Copyright © 2015 Firebear Studio. All rights reserved.
- * @author: Firebear Studio <fbeardev@gmail.com>
+ * @copyright: Copyright © 2019 Firebear Studio. All rights reserved.
+ * @author   : Firebear Studio <fbeardev@gmail.com>
  */
+
 namespace Firebear\ImportExport\Model\Source\Type;
 
 class Dropbox extends AbstractType
 {
     /**
-     * Source code
-     *
      * @var string
      */
     protected $code = 'dropbox';
 
     /**
-     * Dropbox app key
-     *
-     * @var string
+     * @var null
      */
-    protected $appKey;
+    protected $accessToken = null;
 
     /**
-     * Dropbox app secret
-     *
-     * @var string
-     */
-    protected $appSecret;
-
-    /**
-     * @var string
-     */
-    protected $accessToken;
-
-    /**
-     * Download remote source file to temporary directory
-     *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function uploadSource()
     {
-        if ($client = $this->getSourceClient()) {
-            //$filePath = '/var/www/local-magento2.com/magento2/var/import/dropbox/test-dropbox.csv';
-            $sourceFilePath = $this->getData($this->code . '_file_path');
-            $fileName = basename($sourceFilePath);
-            $filePath = $this->_directory->getAbsolutePath($this->getImportPath() . '/' . $fileName);
-
-            try {
-                $dirname = dirname($filePath);
-                if (!is_dir($dirname)) {
-                    mkdir($dirname, 0775, true);
-                }
-                $fileResource = fopen($filePath, 'w+b');
-            } catch (\Exception $e) {
-                throw new  \Magento\Framework\Exception\LocalizedException(__(
-                    "Can't create local file /var/import/dropbox'. Please check files permissions. "
-                    . $e->getMessage()
-                ));
-            }
-
-            try {
-                $fileMetadata = $client->download($sourceFilePath, $filePath);
-            } catch (\Kunnu\Dropbox\Exceptions\DropboxClientException $e) {
-                if ($e->getCode() == 0) {
-                    $response = $this->jsonHelper->jsonDecode($e->getMessage());
-                    throw new \Magento\Framework\Exception\LocalizedException(__(
-                        "Dropbox API Exception: " . $response['error_summary']
-                    ));
-                } else {
-                    throw new \Magento\Framework\Exception\LocalizedException(__(
-                        "Dropbox API Exception: " . $e->getMessage()
-                    ));
-                }
-            }
-
-            fclose($fileResource);
-            if ($fileMetadata) {
-                return $this->_directory->getAbsolutePath($this->getImportPath() . '/' . $fileName);
-            } else {
-                throw new \Magento\Framework\Exception\LocalizedException(__("File not found on Dropbox"));
-            }
-        } else {
-            throw new  \Magento\Framework\Exception\LocalizedException(__("Can't initialize %s client", $this->code));
-        }
-    }
-
-    /**
-     * Download remote images to temporary media directory
-     *
-     * @param $importImage
-     * @param $imageSting
-     *
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function importImage($importImage, $imageSting)
-    {
-        if ($client = $this->getSourceClient()) {
-            $filePath = $this->_directory->getAbsolutePath($this->getMediaImportPath() . $imageSting);
-            $sourceDir = $this->getData($this->code . '_import_images_file_dir');
+        $sourceFilePath = $this->getData($this->code . '_file_path');
+        $fileName = basename($sourceFilePath);
+        $filePath = $this->_directory->getAbsolutePath($this->getImportPath() . '/' . $fileName);
+        try {
             $dirname = dirname($filePath);
             if (!is_dir($dirname)) {
                 mkdir($dirname, 0775, true);
             }
-            $fileResource = fopen($filePath, 'w+b');
-            if ($this->getData($this->code . '_images_on_dropbox')) {
-                try {
-                    $client->download($sourceDir . $importImage, $filePath);
-                } catch (\Kunnu\Dropbox\Exceptions\DropboxClientException $e) {
-                    if ($e->getCode() == 0) {
-                        $response = $this->jsonHelper->jsonDecode($e->getMessage());
-                        throw new \Magento\Framework\Exception\LocalizedException(__(
-                            "Dropbox API Exception: " . $response['error_summary']
-                        ));
-                    } else {
-                        throw new \Magento\Framework\Exception\LocalizedException(__(
-                            "Dropbox API Exception: " . $e->getMessage()
-                        ));
-                    }
-                }
-            }
-            fclose($fileResource);
+        } catch (\Exception $e) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __(
+                    "Can't create local file /var/import/dropbox'. Please check files permissions. "
+                    . $e->getMessage()
+                )
+            );
         }
+        $fileContent = $this->downloadFile($sourceFilePath);
+        file_put_contents($filePath, $fileContent);
+        if ($fileContent) {
+            return $this->getImportPath() . '/' . $fileName;
+        } else {
+            throw new \Magento\Framework\Exception\LocalizedException(__("File not found on Dropbox"));
+        }
+    }
 
-        return $this;
+    /**
+     * @param $importImage
+     * @param $imageSting
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function importImage($importImage, $imageSting)
+    {
+        if (preg_match('/\bhttps?:\/\//i', $importImage, $matches)) {
+            $this->setUrl($importImage, $imageSting, $matches);
+        } else {
+            $filePath = $this->_directory->getAbsolutePath($this->getMediaImportPath() . $imageSting);
+            $dirname = dirname($filePath);
+            $sourceDir = $this->getData($this->code . '_import_images_file_dir');
+            if (!is_dir($dirname)) {
+                mkdir($dirname, 0775, true);
+            }
+            try {
+                $fileContent = $this->downloadFile($sourceDir . $importImage);
+                file_put_contents($filePath, $fileContent);
+            } catch (\Exception $e) {
+                throw new \Magento\Framework\Exception\LocalizedException(__(
+                    "Dropbox API Exception: " . $e->getMessage()
+                ));
+            }
+        }
     }
 
     /**
      * Check if remote file was modified since the last import
      *
      * @param int $timestamp
+     *
      * @return bool|int
      */
     public function checkModified($timestamp)
     {
-        if ($client = $this->getSourceClient()) {
-            $sourceFilePath = $this->getData($this->code . '_file_path');
 
-            if (!$this->_metadata) {
-                $this->_metadata = $client->getMetadata($sourceFilePath);
+        $sourceFilePath = $this->getData($this->code . '_file_path');
+
+        if (!$this->_metadata) {
+            $this->_metadata = $this->getMetadata($sourceFilePath);
+        }
+
+        $modified = strtotsime($this->_metadata['client_modified']);
+
+        return ($timestamp != $modified) ? $modified : false;
+    }
+
+    /**
+     * Set access token
+     *
+     * @param $token
+     */
+    public function setAccessToken($token)
+    {
+        $this->accessToken = $token;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function getSourceClient()
+    {
+        $this->client = false;
+        return $this->client;
+    }
+
+    /**
+     * Get file content from dropbox
+     *
+     * @param $filePath
+     *
+     * @return bool|mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function downloadFile($filePath)
+    {
+        $url = 'https://content.dropboxapi.com/2/files/download';
+
+        $resource = curl_init($url);
+
+        curl_setopt($resource, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $this->getData($this->code . '_access_token'),
+            'Dropbox-API-Arg: {"path": "' . $filePath . '"}'
+        ]);
+        curl_setopt($resource, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($resource, CURLOPT_FOLLOWLOCATION, 1);
+        $result = curl_exec($resource);
+        curl_close($resource);
+
+        if ($json = json_decode($result, true)) {
+            if (!empty($json['error']['.tag'])) {
+                $tag = $json['error']['.tag'];
+                if ($tag == 'invalid_access_token') {
+                    $error = "Invalid Dropbox access token";
+                } elseif ($tag == 'path') {
+                    $error = "File not found on Dropbox: " . $filePath;
+                } else {
+                    $error = "Dropbox api error: " . $result;
+                }
+                throw new \Magento\Framework\Exception\LocalizedException(__($error));
             }
+        }
 
-            $modified = strtotime($this->_metadata['modified']);
-
-            return ($timestamp != $modified) ? $modified : false;
+        if ($result) {
+            return $result;
         }
 
         return false;
     }
 
     /**
-     * Get access token
+     * Get file metadata
      *
-     * @return string|null
+     * @param $filePath
+     *
+     * @return bool|mixed
      */
-    public function getAccessToken()
+    protected function getMetadata($filePath)
     {
-        if (!$this->accessToken) {
-            $this->accessToken = $this->_scopeConfig->getValue(
-                'firebear_importexport/dropbox/token',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
+        $url = 'https://api.dropboxapi.com/2/files/get_metadata';
+
+        $resource = curl_init($url);
+
+        curl_setopt($resource, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $this->getData($this->code . '_access_token'),
+            'Content-Type: application/json',
+        ]);
+        curl_setopt($resource, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($resource, CURLOPT_POST, true);
+        curl_setopt($resource, CURLOPT_POSTFIELDS, '{"path": "' . $filePath . '"}');
+        curl_setopt($resource, CURLOPT_FOLLOWLOCATION, 1);
+        $result = curl_exec($resource);
+        curl_close($resource);
+
+        if ($result) {
+            return json_decode($result, true);
         }
 
-        return $this->accessToken;
-    }
-
-    /**
-     * Get dropbox application key
-     *
-     * @return string|null
-     */
-    public function getAppKey()
-    {
-        if (!$this->appKey) {
-            $this->appKey = $this->_scopeConfig->getValue(
-                'firebear_importexport/dropbox/app_key',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-        }
-
-        return $this->appKey;
-    }
-
-    /**
-     * Get dropbox application secret
-     *
-     * @return string|null
-     */
-    public function getAppSecret()
-    {
-        if (!$this->appSecret) {
-            $this->appSecret = $this->_scopeConfig->getValue(
-                'firebear_importexport/dropbox/app_secret',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-        }
-
-        return $this->appSecret;
-    }
-
-    /**
-     * Prepare and return API client
-     *
-     * @return \Kunnu\Dropbox\Dropbox
-     */
-    protected function getSourceClient()
-    {
-        if (!$this->client) {
-            $appKey = $this->getAppKey();
-            $appSecret = $this->getAppSecret();
-            $accessToken = $this->getAccessToken();
-            if ($accessToken) {
-                $app = new \Kunnu\Dropbox\DropboxApp($appKey, $appSecret, $accessToken);
-                $this->client = new \Kunnu\Dropbox\Dropbox($app);
-            }
-        }
-
-        return $this->client;
+        return false;
     }
 }
