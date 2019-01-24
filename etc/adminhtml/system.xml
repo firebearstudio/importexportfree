@@ -15,19 +15,6 @@
             <label>Import/Export Free</label>
             <tab>firebear</tab>
             <resource>Firebear_ImportExport::config_importexport</resource>
-            <group id="dropbox" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Dropbox</label>
-                <field id="app_key" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>App Key</label>
-                </field>
-                <field id="app_secret" translate="label comment" type="password" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>App Secret</label>
-                </field>
-                <field id="token" translate="label comment" type="password" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Access Token</label>
-                    <comment>By generating an access token, you will be able to make API calls for your own account without going through the authorization flow. To obtain access tokens for other users, use the standard OAuth flow.</comment>
-                </field>
-            </group>
             <group id="ftp" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>FTP</label>
                 <field id="host" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
