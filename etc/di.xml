@@ -9,6 +9,9 @@
     <preference for="Firebear\ImportExport\Model\Source\ConfigInterface"
                 type="Firebear\ImportExport\Model\Source\Config"/>
 
+    <preference for="Magento\UrlRewrite\Model\Storage\DbStorage"
+                type="Firebear\ImportExport\Model\Storage\DbStorage"/>
+
     <type name="Magento\ImportExport\Controller\Adminhtml\Import\Validate">
         <plugin name="firebear_importexport_controller_import_validate"
                 type="Firebear\ImportExport\Plugin\Controller\Adminhtml\Import\Validate"/>

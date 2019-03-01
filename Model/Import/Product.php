@@ -341,6 +341,7 @@ class Product extends MagentoProduct
 
                 $rowSku = $rowData[self::COL_SKU];
 
+
                 if (!$rowSku) {
                     $this->getErrorAggregator()->addRowToSkip($rowNum);
                     continue;
