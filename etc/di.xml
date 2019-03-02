@@ -9,8 +9,9 @@
     <preference for="Firebear\ImportExport\Model\Source\ConfigInterface"
                 type="Firebear\ImportExport\Model\Source\Config"/>
 
-    <preference for="Magento\UrlRewrite\Model\Storage\DbStorage"
-                type="Firebear\ImportExport\Model\Storage\DbStorage"/>
+    <preference for="Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator" type="Firebear\ImportExport\Model\Product\AnchorUrlRewriteGenerator"/>
+    <preference for="Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator" type="Firebear\ImportExport\Model\ProductUrlRewriteGenerator"/>
+
 
     <type name="Magento\ImportExport\Controller\Adminhtml\Import\Validate">
         <plugin name="firebear_importexport_controller_import_validate"
