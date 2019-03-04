@@ -9,9 +9,8 @@
     <preference for="Firebear\ImportExport\Model\Source\ConfigInterface"
                 type="Firebear\ImportExport\Model\Source\Config"/>
 
-    <preference for="Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator" type="Firebear\ImportExport\Model\Product\AnchorUrlRewriteGenerator"/>
-    <preference for="Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator" type="Firebear\ImportExport\Model\ProductUrlRewriteGenerator"/>
-
+    <preference for="Firebear\ImportExport\Api\UrlKeyManagerInterface"
+                type="Firebear\ImportExport\Model\Import\Product\UrlKeyManager" />
 
     <type name="Magento\ImportExport\Controller\Adminhtml\Import\Validate">
         <plugin name="firebear_importexport_controller_import_validate"

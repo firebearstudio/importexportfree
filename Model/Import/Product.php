@@ -10,6 +10,7 @@
 
 namespace Firebear\ImportExport\Model\Import;
 
+use Firebear\ImportExport\Api\UrlKeyManagerInterface;
 use Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\CatalogImportExport\Model\Import\Product as MagentoProduct;
@@ -19,8 +20,13 @@ use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Psr\Log\LoggerInterface;
 use Firebear\ImportExport\Logger\Logger;
+use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Store\Model\Store;
 
 class Product extends MagentoProduct
 {
@@ -56,9 +62,23 @@ class Product extends MagentoProduct
     protected $_sourceType;
 
     /**
+     * @var UrlKeyManagerInterface
+     */
+    protected $urlKeyManager;
+
+    /**
      * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
      */
     protected $attributeFactory;
+
+    /**
+     * @var ProductUrlRewriteGenerator
+     */
+    protected $productUrlRewriteGenerator;
+    /**
+     * @var UrlPersistInterface
+     */
+    protected $urlPersist;
 
     /**
      * @var \Magento\Eav\Model\EntityFactory
@@ -75,6 +95,8 @@ class Product extends MagentoProduct
      */
     protected $_attributeSetGroupCache;
 
+    protected $storeManager;
+
     /**
      * @var \Magento\Catalog\Helper\Product
      */
@@ -84,6 +106,11 @@ class Product extends MagentoProduct
      * @var Logger
      */
     protected $importLogger;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    protected $collection;
 
     /**
      * Product constructor.
@@ -115,6 +142,7 @@ class Product extends MagentoProduct
      * @param DateTime\TimezoneInterface $localeDate
      * @param DateTime $dateTime
      * @param Logger $importLogger
+     * @param \Magento\Store\Model\StoreManager $storeManager
      * @param LoggerInterface $logger
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param MagentoProduct\StoreResolver $storeResolver
@@ -130,6 +158,7 @@ class Product extends MagentoProduct
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
      * @param \Magento\Catalog\Helper\Product $productHelper
+     * @param UrlKeyManagerInterface $urlKeyManager
      * @param array $data
      */
     public function __construct(
@@ -162,6 +191,7 @@ class Product extends MagentoProduct
         DateTime $dateTime,
         Logger $importLogger,
         LoggerInterface $logger,
+        \Magento\Store\Model\StoreManager $storeManager,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
         \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor $skuProcessor,
@@ -176,6 +206,10 @@ class Product extends MagentoProduct
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
         \Magento\Catalog\Helper\Product $productHelper,
+        ProductUrlRewriteGenerator $productUrlRewriteGenerator,
+        UrlPersistInterface $urlPersist,
+        Collection $collection,
+        UrlKeyManagerInterface $urlKeyManager,
         array $data = []
     ) {
         $this->_request = $request;
@@ -185,6 +219,11 @@ class Product extends MagentoProduct
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->productHelper = $productHelper;
         $this->importLogger = $importLogger;
+        $this->storeManager = $storeManager;
+        $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
+        $this->urlPersist = $urlPersist;
+        $this->collection = $collection;
+        $this->urlKeyManager = $urlKeyManager;
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -341,6 +380,19 @@ class Product extends MagentoProduct
 
                 $rowSku = $rowData[self::COL_SKU];
 
+                $storeIds = $this->storeManager->getStore()->getId();
+                $urlKey = isset($rowData[self::URL_KEY])
+                    ? $this->productUrl->formatUrlKey($rowData[self::URL_KEY])
+                    : $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
+                $isDuplicate = $this->isDuplicateUrlKey($urlKey, $rowSku, $storeIds);
+                if ($isDuplicate || $this->urlKeyManager->isUrlKeyExist($rowSku, $urlKey)) {
+                    $urlKey = $this->productUrl->formatUrlKey(
+                        $rowData[self::COL_NAME] . '-' . $rowData[self::COL_SKU]
+                    );
+                }
+                $rowData[self::URL_KEY] = $urlKey;
+                $this->urlKeyManager->addUrlKeys($rowSku, $urlKey);
+                $this->urlKeys = [];
 
                 if (!$rowSku) {
                     $this->getErrorAggregator()->addRowToSkip($rowNum);
@@ -1075,5 +1127,35 @@ class Product extends MagentoProduct
         }
 
         return $rowData;
+    }
+
+    /**
+     * @param $urlKey
+     * @param $sku
+     * @param $storeId
+     *
+     * @return string
+     */
+    protected function isDuplicateUrlKey($urlKey, $sku, $storeId)
+    {
+        $result = false;
+        $urlKeyHtml = $urlKey . $this->getProductUrlSuffix();
+        $resource = $this->getResource();
+        $select = $this->_connection->select()->from(
+            ['url_rewrite' => $resource->getTable('url_rewrite')],
+            ['request_path', 'store_id']
+        )->joinLeft(
+            ['cpe' => $resource->getTable('catalog_product_entity')],
+            'cpe.entity_id = url_rewrite.entity_id'
+        )->where("request_path='$urlKey' OR request_path='$urlKeyHtml'")
+            ->where('store_id IN (?)', $storeId)
+            ->where('cpe.sku not in (?)', $sku);
+        $isDuplicate = $this->_connection->fetchAssoc(
+            $select
+        );
+        if (!empty($isDuplicate)) {
+            $result = true;
+        }
+        return $result;
     }
 }
