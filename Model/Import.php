@@ -9,7 +9,8 @@ namespace Firebear\ImportExport\Model;
 
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 
-class Import extends \Magento\ImportExport\Model\Import {
+class Import extends \Magento\ImportExport\Model\Import
+{
 
     /**
      * Limit displayed errors on Import History page.

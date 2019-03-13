@@ -9,6 +9,9 @@
     <preference for="Firebear\ImportExport\Model\Source\ConfigInterface"
                 type="Firebear\ImportExport\Model\Source\Config"/>
 
+    <preference for="Firebear\ImportExport\Api\UrlKeyManagerInterface"
+                type="Firebear\ImportExport\Model\Import\Product\UrlKeyManager" />
+
     <type name="Magento\ImportExport\Controller\Adminhtml\Import\Validate">
         <plugin name="firebear_importexport_controller_import_validate"
                 type="Firebear\ImportExport\Plugin\Controller\Adminhtml\Import\Validate"/>
