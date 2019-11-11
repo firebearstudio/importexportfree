@@ -106,11 +106,7 @@ class Import extends \Magento\ImportExport\Model\Import
             $localeDate,
             $data
         );
-
-        $this->_debugMode = (bool) $this->_coreConfig->getValue(
-            'firebear_importexport/general/debug',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $this->_debugMode = $helper->getDebugMode();
     }
 
     /**
