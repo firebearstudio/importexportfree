@@ -43,7 +43,7 @@ class Dropbox extends AbstractType
         $fileContent = $this->downloadFile($sourceFilePath);
         file_put_contents($filePath, $fileContent);
         if ($fileContent) {
-            return $this->getImportPath() . '/' . $fileName;
+            return $this->_directory->getAbsolutePath($this->getImportPath() . '/' . $fileName);
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__("File not found on Dropbox"));
         }
