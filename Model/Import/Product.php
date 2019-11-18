@@ -113,6 +113,13 @@ class Product extends MagentoProduct
     protected $collection;
 
     /**
+     * Product entity link field
+     *
+     * @var string
+     */
+    private $productEntityLinkField;
+
+    /**
      * Product constructor.
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Firebear\ImportExport\Helper\Data $helper
@@ -285,7 +292,7 @@ class Product extends MagentoProduct
     public function importData()
     {
         $this->_validatedRows = null;
-        
+
         if (Import::BEHAVIOR_REPLACE == $this->getBehavior()) {
             $this->_replaceFlag = true;
             $this->replaceProducts();
@@ -297,6 +304,7 @@ class Product extends MagentoProduct
         $this->_eventManager->dispatch('catalog_product_import_finish_before', ['adapter' => $this]);
         return true;
     }
+
     /**
      * Replace imported products.
      *
@@ -336,6 +344,7 @@ class Product extends MagentoProduct
 
         return $this;
     }
+
     /**
      * Gather and save information about product entities.
      *
@@ -353,6 +362,7 @@ class Product extends MagentoProduct
         $isPriceGlobal = $this->_catalogData->isPriceGlobal();
         $productLimit = null;
         $productsQty = null;
+        $entityLinkField = $this->getProductEntityLinkField();
 
         while ($nextBunch = $this->_dataSourceModel->getNextBunch()) {
             $entityRowsIn = $entityRowsUp = [];
@@ -371,11 +381,11 @@ class Product extends MagentoProduct
                     $this->getErrorAggregator()->addRowToSkip($rowNum);
                     continue;
                 }
-                
+
                 if (!$this->validateRow($rowData, $rowNum)) {
                     continue;
                 }
-                
+
                 $rowScope = $this->getRowScope($rowData);
 
                 $rowSku = $rowData[self::COL_SKU];
@@ -432,7 +442,8 @@ class Product extends MagentoProduct
                     // existing row
                     $entityRowsUp[] = [
                         'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
-                        'entity_id' => $this->_oldSku[$rowSku]['entity_id'],
+                        'attribute_set_id' => $this->skuProcessor->getNewSku($rowSku)['attr_set_id'],
+                        $entityLinkField => $this->_oldSku[strtolower($rowSku)][$entityLinkField]
                     ];
                 }
 
@@ -446,7 +457,7 @@ class Product extends MagentoProduct
                     $this->categoriesCache[$rowSku][$id] = true;
                 }
                 unset($rowData['rowNum']);
-                
+
                 if (!array_key_exists($rowSku, $this->websitesCache)) {
                     $this->websitesCache[$rowSku] = [];
                 }
@@ -635,7 +646,7 @@ class Product extends MagentoProduct
                     $entityRowsUp
                 );
             }
-            
+
             $this->importLogger->debug('Imported: ' . count($entityRowsIn) . ' rows');
             $this->importLogger->debug('Updated: ' . count($entityRowsUp) . ' rows');
 
@@ -657,7 +668,7 @@ class Product extends MagentoProduct
         }
         return $this;
     }
-    
+
     /**
      * Import images via initialized source type
      *
@@ -817,7 +828,7 @@ class Product extends MagentoProduct
         }
         return $rowData;
     }
-    
+
     /**
      * Parse attributes names and values string to array.
      *
@@ -930,27 +941,27 @@ class Product extends MagentoProduct
                             $attributeSetCodes = explode(',', $columnData[self::ATTRIBUTE_SET_COLUMN]);
                             foreach ($attributeSetCodes as $attributeSetCode) {
                                 if (isset($this->_attrSetNameToId[$attributeSetCode])) {
-                                $attributeSetId = $this->_attrSetNameToId[$attributeSetCode];
-                                $attributeGroupCode = isset($columnData[self::ATTRIBUTE_SET_GROUP]) ? $columnData[self::ATTRIBUTE_SET_GROUP] : 'product-details';
-                                if (!isset($this->_attributeSetGroupCache[$attributeSetId])) {
-                                    $groupCollection = $this->groupCollectionFactory->create()->setAttributeSetFilter($attributeSetId)->load();
-                                    foreach ($groupCollection as $group) {
-                                        $this->_attributeSetGroupCache[$attributeSetId][$group->getAttributeGroupCode()] = $group->getAttributeGroupId();
-                                    }
-                                }
-
-                                foreach ($this->_attributeSetGroupCache[$attributeSetId] as $groupCode => $groupId) {
-                                    if ($groupCode == $attributeGroupCode) {
-                                        $attribute->setAttributeSetId($attributeSetId);
-                                        $attribute->setAttributeGroupId($groupId);
-                                        try {
-                                            $attribute->save();
-                                        } catch (\Exception $e) {
-
+                                    $attributeSetId = $this->_attrSetNameToId[$attributeSetCode];
+                                    $attributeGroupCode = isset($columnData[self::ATTRIBUTE_SET_GROUP]) ? $columnData[self::ATTRIBUTE_SET_GROUP] : 'product-details';
+                                    if (!isset($this->_attributeSetGroupCache[$attributeSetId])) {
+                                        $groupCollection = $this->groupCollectionFactory->create()->setAttributeSetFilter($attributeSetId)->load();
+                                        foreach ($groupCollection as $group) {
+                                            $this->_attributeSetGroupCache[$attributeSetId][$group->getAttributeGroupCode()] = $group->getAttributeGroupId();
                                         }
-                                        break;
                                     }
-                                }
+
+                                    foreach ($this->_attributeSetGroupCache[$attributeSetId] as $groupCode => $groupId) {
+                                        if ($groupCode == $attributeGroupCode) {
+                                            $attribute->setAttributeSetId($attributeSetId);
+                                            $attribute->setAttributeGroupId($groupId);
+                                            try {
+                                                $attribute->save();
+                                            } catch (\Exception $e) {
+
+                                            }
+                                            break;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -1157,5 +1168,21 @@ class Product extends MagentoProduct
             $result = true;
         }
         return $result;
+    }
+
+    /**
+     * Get product entity link field
+     *
+     * @return string
+     * @throws \Exception
+     */
+    private function getProductEntityLinkField()
+    {
+        if (!$this->productEntityLinkField) {
+            $this->productEntityLinkField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
+        }
+        return $this->productEntityLinkField;
     }
 }
