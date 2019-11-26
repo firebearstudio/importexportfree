@@ -12,6 +12,12 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class Data extends AbstractHelper
 {
+    const GENERAL_DEBUG = 'firebear_importexport/general/debug';
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    protected $coreConfig;
 
     /**
      * Import source type factory model
@@ -30,6 +36,7 @@ class Data extends AbstractHelper
         Context $context,
         Factory $sourceFactory
     ) {
+        $this->coreConfig = $context->getScopeConfig();
         $this->sourceFactory = $sourceFactory;
         parent::__construct($context);
     }
@@ -76,5 +83,16 @@ class Data extends AbstractHelper
     public function getSourceFactory()
     {
         return $this->sourceFactory;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDebugMode()
+    {
+        return (bool)$this->coreConfig->getValue(
+            self::GENERAL_DEBUG,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }
