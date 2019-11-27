@@ -5,6 +5,7 @@ use Firebear\ImportExport\Model\Source\Factory;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Class Data
@@ -27,17 +28,27 @@ class Data extends AbstractHelper
     protected $sourceFactory;
 
     /**
+     * Json Serializer
+     *
+     * @var SerializerInterface
+     */
+    public $serializer;
+
+    /**
      * Data Helper constructor
      *
      * @param Context $context
      * @param Factory $sourceFactory
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         Context $context,
-        Factory $sourceFactory
+        Factory $sourceFactory,
+        SerializerInterface $serializer
     ) {
         $this->coreConfig = $context->getScopeConfig();
         $this->sourceFactory = $sourceFactory;
+        $this->serializer = $serializer;
         parent::__construct($context);
     }
 
