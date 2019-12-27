@@ -11,6 +11,7 @@
 namespace Firebear\ImportExport\Model\Import;
 
 use Firebear\ImportExport\Api\UrlKeyManagerInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
 use Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\CatalogImportExport\Model\Import\Product as MagentoProduct;
@@ -389,20 +390,6 @@ class Product extends MagentoProduct
                 $rowScope = $this->getRowScope($rowData);
 
                 $rowSku = $rowData[self::COL_SKU];
-
-                $storeIds = $this->storeManager->getStore()->getId();
-                $urlKey = isset($rowData[self::URL_KEY])
-                    ? $this->productUrl->formatUrlKey($rowData[self::URL_KEY])
-                    : $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
-                $isDuplicate = $this->isDuplicateUrlKey($urlKey, $rowSku, $storeIds);
-                if ($isDuplicate || $this->urlKeyManager->isUrlKeyExist($rowSku, $urlKey)) {
-                    $urlKey = $this->productUrl->formatUrlKey(
-                        $rowData[self::COL_NAME] . '-' . $rowData[self::COL_SKU]
-                    );
-                }
-                $rowData[self::URL_KEY] = $urlKey;
-                $this->urlKeyManager->addUrlKeys($rowSku, $urlKey);
-                $this->urlKeys = [];
 
                 if (!$rowSku) {
                     $this->getErrorAggregator()->addRowToSkip($rowNum);
@@ -817,6 +804,11 @@ class Product extends MagentoProduct
         $rowData = $this->_parseAdditionalAttributes($rowData);
 
         $rowData = $this->setStockUseConfigFieldsValues($rowData);
+        if (isset($this->_parameters['generate_url'])
+            && $this->_parameters['generate_url'] == 1
+        ) {
+            $rowData = $this->generateUrlKey($rowData);
+        }
         if (array_key_exists('status', $rowData)
             && $rowData['status'] != \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         ) {
@@ -1184,5 +1176,118 @@ class Product extends MagentoProduct
                 ->getLinkField();
         }
         return $this->productEntityLinkField;
+    }
+
+    /**
+     * Validate data rows and save bunches to DB.
+     *
+     * @return $this
+     */
+    protected function _saveValidatedBunches()
+    {
+        $source = $this->_getSource();
+        $currentDataSize = 0;
+        $bunchRows = [];
+        $startNewBunch = false;
+        $nextRowBackup = [];
+        $maxDataSize = $this->_resourceHelper->getMaxDataSize();
+        $bunchSize = $this->_importExportData->getBunchSize();
+        $skuSet = [];
+
+        $source->rewind();
+        $this->_dataSourceModel->cleanBunches();
+
+        while ($source->valid() || $bunchRows) {
+            if ($startNewBunch || !$source->valid()) {
+                $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
+
+                $bunchRows = $nextRowBackup;
+                $currentDataSize = strlen($this->getSerializer()->serialize($bunchRows));
+                $startNewBunch = false;
+                $nextRowBackup = [];
+            }
+            if ($source->valid()) {
+                try {
+                    $rowData = $source->current();
+                    if (array_key_exists('sku', $rowData)) {
+                        $skuSet[$rowData['sku']] = true;
+                    }
+                } catch (\InvalidArgumentException $e) {
+                    $this->addRowError($e->getMessage(), $this->_processedRowsCount);
+                    $this->_processedRowsCount++;
+                    $source->next();
+                    continue;
+                }
+
+                $rowData = $this->customFieldsMapping($rowData);
+
+                $this->_processedRowsCount++;
+
+                if ($this->validateRow($rowData, $source->key())) {
+                    // add row to bunch for save
+                    $rowData = $this->_prepareRowForDb($rowData);
+                    $rowSize = strlen($this->jsonHelper->jsonEncode($rowData));
+
+                    $isBunchSizeExceeded = $bunchSize > 0 && count($bunchRows) >= $bunchSize;
+
+                    if ($currentDataSize + $rowSize >= $maxDataSize || $isBunchSizeExceeded) {
+                        $startNewBunch = true;
+                        $nextRowBackup = [$source->key() => $rowData];
+                    } else {
+                        $bunchRows[$source->key()] = $rowData;
+                        $currentDataSize += $rowSize;
+                    }
+                }
+                $source->next();
+            }
+        }
+        $this->checkUrlKeyDuplicates();
+        $this->getOptionEntity()->validateAmbiguousData();
+        $this->_processedEntitiesCount = (count($skuSet)) ? : $this->_processedRowsCount;
+
+        return $this;
+    }
+
+    /**
+     * @param $rowData
+     * @return mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function generateUrlKey($rowData)
+    {
+        $sku = $this->getCorrectSkuAsPerLength($rowData);
+        $storeIds = $this->storeManager->getStore()->getId();
+        $urlKey = isset($rowData[self::URL_KEY])
+            ? $this->productUrl->formatUrlKey($rowData[self::URL_KEY])
+            : $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
+        $isDuplicate = $this->isDuplicateUrlKey($urlKey, $sku, $storeIds);
+        if ($isDuplicate || $this->urlKeyManager->isUrlKeyExist($sku, $urlKey)) {
+            $urlKey = $this->productUrl->formatUrlKey(
+                $rowData[self::COL_NAME] . '-' . $rowData[self::COL_SKU]
+            );
+        }
+        $rowData[self::URL_KEY] = $urlKey;
+        $this->urlKeyManager->addUrlKeys($sku, $urlKey);
+
+        return $rowData;
+    }
+
+    /**
+     * @param array $rowData
+     *
+     * @return mixed
+     */
+    public function getCorrectSkuAsPerLength(array $rowData)
+    {
+        return strlen($rowData[self::COL_SKU]) > Sku::SKU_MAX_LENGTH ?
+            substr($rowData[self::COL_SKU], 0, Sku::SKU_MAX_LENGTH) : $rowData[self::COL_SKU];
+    }
+
+    /**
+     * @return \Magento\Framework\Serialize\Serializer\Json|\Magento\Framework\Serialize\SerializerInterface
+     */
+    private function getSerializer()
+    {
+        return $this->_helper->serializer;
     }
 }

@@ -21,6 +21,7 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'prototype'], function(jQuery){
             this.showBehavior(entity.val());
             this.showImportSource(true);
             this.showSampleFile(entity.val());
+            this.showGenerateUrlIfDuplicate(entity.val());
         } else {
             this.showBehavior(false);
             this.showImportSource(false);
@@ -66,7 +67,7 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'prototype'], function(jQuery){
             action: newActionUrl,
             target: this.ifrElemName
         }]);
-    },
+    };
 
     /**
      * Show upload source dropdown
@@ -82,6 +83,18 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'prototype'], function(jQuery){
             jQuery('#import_source_fieldset').hide();
         }
         jQuery('.source-fieldset').find('._required').removeClass('required-entry').prop('disabled', true);
+    };
+
+    /**
+     *  Show Generate Unique Url if Duplicate
+     * @param entitySelected
+     */
+    varienImport.showGenerateUrlIfDuplicate = function(entitySelected) {
+        if (entitySelected === 'catalog_product') {
+            jQuery('.generate_url').show();
+        } else {
+            jQuery('.generate_url').hide();
+        }
     };
 //]]>
 

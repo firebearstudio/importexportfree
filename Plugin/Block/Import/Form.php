@@ -101,6 +101,18 @@ class Form
             }
         }
 
+        $fileFieldset = $form->getElement('basic_behavior_fieldset');
+        $fileFieldset->addField(
+            'base_behavior generate_url',
+            'checkbox',
+            [
+                'name' => 'generate_url',
+                'label' => __('Generate Unique Url if Duplicate'),
+                'title' => __('Generate Unique Url if Duplicate'),
+                'value' => 1,
+            ]
+        );
+
         return [$form];
     }
 }
