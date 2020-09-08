@@ -525,7 +525,7 @@ class Product extends MagentoProduct
                             if ($column == self::COL_MEDIA_IMAGE) {
                                 $rowData[$column][] = $uploadedFile;
                             }
-                            $mediaGallery[$rowSku][] = [
+                            $mediaGallery[0][$rowSku][] = [
                                 'attribute_id' => $this->getMediaGalleryAttributeId(),
                                 'label' => isset($rowLabels[$column][$position]) ? $rowLabels[$column][$position] : '',
                                 'position' => $position + 1,
