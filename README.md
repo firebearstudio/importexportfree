@@ -141,4 +141,6 @@ After purchasing the extension, you will receive free upgrades during one year a
 Get special discounts, add features to the Improved Import development roadmap and more. Firebear Studio offers partnership opportunities for the development agencies and everyone who is interested in Firebear blog.
 <p align="center" /><a href="https://firebearstudio.com/blog/introducing-firebear-partner-loyalty-program.html">Read more about Firebear partner program</a></p>
 
+<a href="https://genixly.io">E-Commerce GEO & AI Optimisation</a>
+
 
